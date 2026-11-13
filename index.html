@@ -1,2 +1,72 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>ran与xuan · 我们的恋爱收藏馆</title><style>*{box-sizing:border-box}body{margin:0;min-height:100svh;display:grid;place-items:center;background:#faf7f3;color:#46617e;font:14px/1.9 system-ui;text-align:center;padding:24px}h1{font:italic 32px Georgia}h1 i{color:#b9869f}p{color:#7a7f8b}button{border:1px solid #d7c8d1;background:#f6e7ee;border-radius:24px;padding:12px 24px;color:#77576a;font:inherit;cursor:pointer}[hidden]{display:none!important}</style></head><body><main><h1>ran <i>&</i> xuan</h1><p id="message" role="status">正在翻开我们的日子…</p><button id="retry" hidden>再试一次</button><noscript>请启用浏览器 JavaScript 查看收藏馆。</noscript></main><script>
-const msg=document.getElementById('message'),retry=document.getElementById('retry');async function openMuseum(){retry.hidden=true;try{if(!('serviceWorker'in navigator))throw Error('browser');const reg=await navigator.serviceWorker.register('./sw.js?v=20261113-public');const worker=reg.installing||reg.waiting||reg.active;if(worker.state!=='activated')await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('worker')),20000);worker.addEventListener('statechange',()=>{if(worker.state==='activated'){clearTimeout(timer);resolve();}});});if(!navigator.serviceWorker.controller)await new Promise((resolve,reject)=>{navigator.serviceWorker.addEventListener('controllerchange',resolve,{once:true});setTimeout(()=>reject(Error('controller')),10000);});const response=await fetch('./museum.json',{cache:'no-store',signal:AbortSignal.timeout(30000)});if(!response.ok)throw Error('network');const bundle=await response.json();await new Promise((resolve,reject)=>{const channel=new MessageChannel();const timer=setTimeout(()=>reject(Error('cache')),15000);channel.port1.onmessage=e=>{clearTimeout(timer);e.data.ok?resolve():reject(Error('cache'));};worker.postMessage({type:'install-public',bundle},[channel.port2]);});location.replace(new URL('./_museum/index.html',location.href));}catch(e){msg.textContent='暂时没能打开，请检查网络后再试一次，或用新版浏览器打开。';retry.hidden=false;}}retry.onclick=openMuseum;openMuseum();</script></body></html>
+const message = document.getElementById('message');
+const retry = document.getElementById('retry');
+let opening = false;
+
+function waitUntilReady(target, eventName, ready, timeout) {
+  return new Promise((resolve, reject) => {
+    let timer;
+    function cleanup() {
+      clearTimeout(timer);
+      target.removeEventListener(eventName, check);
+    }
+    function check() {
+      if (ready()) { cleanup(); resolve(); }
+    }
+    target.addEventListener(eventName, check);
+    timer = setTimeout(() => { cleanup(); reject(new Error('ready-timeout')); }, timeout);
+    check();
+  });
+}
+
+function installCollection(worker, bundle) {
+  return new Promise((resolve, reject) => {
+    const channel = new MessageChannel();
+    const timer = setTimeout(() => finish(new Error('cache')), 15000);
+    function finish(error) {
+      clearTimeout(timer);
+      channel.port1.close();
+      error ? reject(error) : resolve();
+    }
+    channel.port1.onmessage = event => finish(event.data.ok ? null : new Error('cache'));
+    try { worker.postMessage({type:'install-public', bundle}, [channel.port2]); }
+    catch (error) { channel.port2.close(); finish(error); }
+  });
+}
+
+async function openMuseum() {
+  if (opening) return;
+  opening = true;
+  retry.hidden = true;
+  retry.disabled = true;
+  message.textContent = '正在翻开我们的日子…';
+  try {
+    if (!('serviceWorker' in navigator)) throw new Error('unsupported');
+    const registration = await navigator.serviceWorker.register('./sw.js?v=20261113-public');
+    const worker = registration.installing || registration.waiting || registration.active;
+    if (!worker) throw new Error('ready-timeout');
+    await waitUntilReady(worker, 'statechange', () => worker.state === 'activated', 20000);
+    await waitUntilReady(navigator.serviceWorker, 'controllerchange', () => !!navigator.serviceWorker.controller, 10000);
+    message.textContent = '正在取来照片和写给你的信…';
+    const response = await fetch('./museum.json', {cache:'no-store', signal:AbortSignal.timeout(30000)});
+    if (!response.ok) throw new Error('network');
+    const bundle = await response.json();
+    if (bundle.v !== 2 || !bundle.files?.['index.html']) throw new Error('invalid');
+    message.textContent = '快好了，马上就能见到我们的回忆。';
+    await installCollection(worker, bundle);
+    location.replace(new URL('./_museum/index.html', location.href));
+  } catch (error) {
+    message.textContent = error.message === 'unsupported'
+      ? '请用 Safari、Chrome 或 Edge 浏览器打开收藏馆。'
+      : error.message === 'cache'
+      ? '浏览器暂时无法保存照片，请确认有可用存储空间后再试。'
+      : '这次没能取到完整的回忆，检查网络后再试一次。';
+    retry.hidden = false;
+  } finally {
+    opening = false;
+    retry.disabled = false;
+  }
+}
+retry.onclick = openMuseum;
+openMuseum();
+</script></body></html>
