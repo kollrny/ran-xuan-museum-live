@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>ran与xuan · 我们的恋爱收藏馆</title><style>*{box-sizing:border-box}body{margin:0;min-height:100svh;display:grid;place-items:center;background:#faf7f3;color:#46617e;font:14px/1.9 system-ui;text-align:center;padding:24px}h1{font:italic 32px Georgia}h1 i{color:#b9869f}p{color:#7a7f8b}button{border:1px solid #d7c8d1;background:#f6e7ee;border-radius:24px;padding:12px 24px;color:#77576a;font:inherit;cursor:pointer}[hidden]{display:none!important}</style></head><body><main><h1>ran <i>&</i> xuan</h1><p id="message" role="status">正在翻开我们的日子…</p><button id="retry" hidden>再试一次</button><noscript>请启用浏览器 JavaScript 查看收藏馆。</noscript></main><script>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>ran与xuan · 我们的恋爱收藏馆</title><style>*{box-sizing:border-box}body{margin:0;min-height:100svh;display:grid;place-items:center;background:#171514;color:#f0e7d8;font:14px/1.9 system-ui;text-align:center;padding:24px}h1{font:italic 32px Georgia}h1 i{color:#c7a07b}p{color:#bdb1a3}button{border:1px solid #73513a;background:#73513a;border-radius:24px;padding:12px 24px;color:#f0e7d8;font:inherit;cursor:pointer}[hidden]{display:none!important}</style></head><body><main><h1>ran <i>&</i> xuan</h1><p id="message" role="status">正在翻开我们的日子…</p><button id="retry" hidden>再试一次</button><noscript>请启用浏览器 JavaScript 查看收藏馆。</noscript></main><script>
 const message = document.getElementById('message');
 const retry = document.getElementById('retry');
 let opening = false;
@@ -52,6 +52,11 @@ async function openMuseum() {
     if (!response.ok) throw new Error('network');
     const bundle = await response.json();
     if (bundle.v !== 2 || !bundle.files?.['index.html']) throw new Error('invalid');
+    const uiResponse=await fetch('./museum-ui.json', {cache:'no-store',signal:AbortSignal.timeout(15000)});
+    if(!uiResponse.ok) throw new Error('network');
+    const ui=await uiResponse.json();
+    if(ui.v!==1 || !ui.files?.['index.html']) throw new Error('invalid');
+    Object.assign(bundle.files,ui.files); bundle.version=ui.version;
     message.textContent = '快好了，马上就能见到我们的回忆。';
     await installCollection(worker, bundle);
     location.replace(new URL('./_museum/index.html', location.href));
