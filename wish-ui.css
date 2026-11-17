@@ -1,0 +1,128 @@
+/* Wish book: cohesive layout with unified spacing and colors. */
+body[data-room=wishes]{background:radial-gradient(ellipse at 8% 380px,rgba(86,107,135,0.25),transparent 65%),radial-gradient(ellipse at 94% 650px,rgba(150,95,121,0.2),transparent 65%),var(--bg)}
+
+.wish-book{margin:0 0 var(--space-6)!important;background:transparent!important;scroll-margin-top:var(--space-3)}
+
+.wish-book .wish-book-heading{display:grid;grid-template-columns:1.4fr .7fr;gap:var(--space-6);align-items:center;padding:var(--space-5) 0 var(--space-6);background:none;border:0;border-radius:0;overflow:visible}
+
+.wish-book-heading h1{font-size:clamp(36px,4.5vw,56px);font-weight:400;line-height:1.4;margin:var(--space-4) 0;letter-spacing:.04em;color:var(--ink)}
+
+.wish-book-heading .wish-cover-copy>p{font-size:var(--text-sm);line-height:var(--leading-relaxed);color:var(--muted)}
+
+.wish-blue{color:var(--copper)}
+.wish-pink{color:var(--accent)}
+
+.wish-write-link{margin-top:var(--space-2);padding:var(--space-2) 0!important;background:none;border:0;border-bottom:1px solid var(--line);border-radius:0;font-size:var(--text-xs);color:var(--copper);transition:color .25s var(--ease)}
+
+.wish-write-link:hover{color:var(--ink)}
+
+.wish-summary{display:flex;align-items:center;gap:var(--space-5);padding:var(--space-3) 0;border-block:1px solid var(--line)}
+
+.wish-summary p{margin:0;font-size:var(--text-xs);color:var(--muted)}
+
+.wish-summary b{font:28px Georgia;color:var(--ink);margin-right:var(--space-1)}
+
+.wish-book progress{width:clamp(80px,22vw,220px);height:3px;appearance:none;border:0;background:rgba(205,195,182,0.15);border-radius:3px;overflow:hidden;accent-color:var(--copper)}
+
+.wish-toolbar{padding:var(--space-4) 0 var(--space-3)}
+
+.wish-status-tabs{display:flex;gap:var(--space-4);border-bottom:1px solid var(--line)}
+
+.wish-status-tabs button{min-height:44px;padding:var(--space-2) 0 var(--space-2);border:0;border-bottom:2px solid transparent;border-radius:0;background:none!important;font-size:var(--text-sm);color:var(--muted);transition:all .25s var(--ease)}
+
+.wish-status-tabs button[aria-pressed=true]{border-bottom-color:var(--copper);color:var(--ink)}
+
+.wish-book .wish-book-filters{display:flex;gap:var(--space-2);flex-wrap:wrap;margin:var(--space-3) 0 0}
+
+.wish-book .wish-book-filters button{min-height:40px;padding:var(--space-1) var(--space-2);font-size:var(--text-xs);border:1px solid var(--line);border-radius:20px;background:transparent;color:var(--muted);transition:all .25s var(--ease)}
+
+.wish-book .wish-book-filters button[aria-pressed=true]{background:rgba(139,111,79,0.15);border-color:var(--copper);color:var(--ink)}
+
+.wish-list-caption{display:flex;align-items:center;justify-content:space-between;margin:var(--space-4) 0 var(--space-2);gap:var(--space-3)}
+
+.wish-list-caption h2{font-size:24px;font-weight:400;margin:0;color:var(--ink)}
+
+.wish-result-count{font-size:var(--text-xs);color:var(--muted);white-space:nowrap;opacity:.7}
+
+.wish-book-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:var(--space-5)}
+
+.wish-book .wish-page{position:relative;display:grid;grid-template-columns:40px minmax(0,1fr);column-gap:var(--space-3);align-content:start;padding:var(--space-4) var(--space-2) var(--space-4);border:0;border-bottom:1px solid var(--line);background:transparent;box-shadow:none;transform:none;transition:all .25s var(--ease)}
+
+.wish-number{font:italic 14px Georgia;color:var(--muted);padding-top:var(--space-1);opacity:.6}
+
+.wish-book .wish-page h3{font-size:19px;font-weight:400;line-height:1.65;min-height:0;margin:var(--space-2) 0 var(--space-3);color:var(--ink);overflow-wrap:anywhere}
+
+.wish-row-actions{grid-column:2;display:flex;gap:var(--space-2);flex-wrap:wrap}
+
+.wish-book .wish-page button{font-size:var(--text-xs);min-height:40px;padding:var(--space-1) var(--space-2);margin:0;border-radius:18px;border:1px solid var(--line);background:transparent;color:var(--muted);transition:all .25s var(--ease)}
+
+.wish-book .wish-page button[aria-pressed=true]{background:rgba(139,111,79,0.15);border-color:var(--copper);color:var(--ink)}
+
+.wish-more{display:block;margin:var(--space-5) auto var(--space-6);padding:var(--space-2) var(--space-3);min-height:44px;border:1px solid var(--line);border-radius:24px;background:transparent;color:var(--ink);transition:all .25s var(--ease)}
+
+.wish-backup{margin:var(--space-5) 0 0;padding:var(--space-4) 0;border-block:1px solid var(--line);color:var(--muted);font-size:var(--text-xs)}
+
+.wish-backup summary{cursor:pointer;min-height:32px;transition:color .25s var(--ease)}
+
+.wish-backup summary:hover{color:var(--ink)}
+
+.wish-backup button{min-height:42px;font-size:var(--text-xs);margin:var(--space-2) var(--space-2) 0 0;padding:var(--space-1) var(--space-2);border-radius:4px;background:transparent;border:1px solid var(--line);color:var(--muted);transition:all .25s var(--ease)}
+
+@media(max-width:650px){
+  .wish-book .wish-book-heading{grid-template-columns:1fr 100px;gap:var(--space-3);padding:var(--space-3) 0 var(--space-4)}
+  .wish-book-heading h1{font-size:28px;margin:var(--space-2) 0}
+  .wish-book-heading .wish-cover-copy>p{font-size:var(--text-xs)}
+  .wish-summary{gap:var(--space-3);padding:var(--space-2) 0}
+  .wish-summary b{font-size:24px}
+  .wish-book progress{width:100%;max-width:140px;margin-top:var(--space-2)}
+  .wish-toolbar{padding:var(--space-3) 0 var(--space-2)}
+  .wish-book .wish-book-filters{gap:var(--space-1);margin-top:var(--space-2)}
+  .wish-list-caption{margin-top:var(--space-3)}
+  .wish-list-caption h2{font-size:20px}
+  .wish-book-grid{grid-template-columns:1fr}
+  .wish-book .wish-page{padding:var(--space-3) 0;grid-template-columns:36px minmax(0,1fr);column-gap:var(--space-2)}
+  .wish-book .wish-page h3{font-size:18px;margin:var(--space-1) 0 var(--space-2)}
+  .wish-row-actions{gap:var(--space-1)}
+  .wish-book .wish-page button{min-height:40px;padding:var(--space-1) var(--space-2)}
+  .wish-more{font-size:var(--text-sm)}
+}
+.wish-book{margin:0 0 42px!important;background:transparent!important;scroll-margin-top:24px}.wish-book .wish-book-heading{display:grid;grid-template-columns:1.4fr .7fr;gap:32px;align-items:center;padding:30px 0 42px;background:none;border:0;border-radius:0;overflow:visible}.wish-book-heading:after{display:none}.wish-book-heading h1{font-size:clamp(32px,4.5vw,53px);font-weight:400;line-height:1.4;margin:20px 0;letter-spacing:.04em;color:var(--ink-strong)}.wish-book-heading .wish-cover-copy>p{font-size:14px;line-height:1.9;color:var(--muted)}.wish-blue{color:var(--his)}.wish-pink{color:var(--hers)}.wish-write-link{margin-top:12px;padding:12px 0!important;background:none;border:0;border-bottom:1px solid var(--line);border-radius:0;font-size:12px;color:var(--copper-deep)}.wish-cover-object{position:relative;justify-self:center;width:225px;aspect-ratio:.79;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:15px;transform:rotate(7deg);border-radius:3px 14px 14px 3px;color:#4a3a32;background:repeating-linear-gradient(82deg,rgba(229,215,195,0.04) 0 1px,transparent 1px 4px),linear-gradient(100deg,#d8b7cc,#ecd3df);border:1px solid #c9a4b3;box-shadow:-5px 2px 0 #c4b39a,-8px 3px 0 #b08fa5,15px 22px 38px rgba(120,90,50,0.16),inset 9px 0 rgba(44,38,58,0.08),inset 11px 0 rgba(204,184,165,0.08)}.wish-cover-object:after{content:'';position:absolute;inset:18px 16px 18px 24px;border:1px solid rgba(212,184,166,0.2);border-radius:2px 7px 7px 2px;pointer-events:none}.wish-cover-object small{font-size:10px;letter-spacing:.13em}.wish-cover-object strong{font:76px/1 Georgia;font-weight:400;color:#4a352a}.wish-cover-object>span:not(.wish-ribbon){font-size:11px;letter-spacing:.1em}.wish-cover-object i{font:italic 18px Georgia;color:#8a6b78;margin-top:14px}.wish-ribbon{position:absolute;width:14px;height:52px;top:-4px;clip-path:polygon(0 0,100% 0,100% 100%,50% 82%,0 100%);box-shadow:2px 2px 3px rgba(0,0,0,0.12)}.blue-ribbon{right:52px;background:#9dbbd4}.pink-ribbon{right:31px;background:#d5a7bb;height:65px}
+.wish-summary{display:flex;align-items:center;gap:36px;padding:22px 0;border-block:1px solid var(--line)}.wish-summary p{margin:0;font-size:12px;color:var(--muted)}.wish-summary b{font:25px Georgia;color:var(--ink);margin-right:4px}.wish-summary>p b{color:var(--his)}.wish-completion{display:flex;align-items:center;gap:20px;flex:1}.wish-completion b{color:var(--hers)}.wish-book progress{width:clamp(60px,20vw,200px);height:4px;appearance:none;border:0;background:var(--line);border-radius:3px;overflow:hidden;accent-color:var(--copper)}.wish-book progress::-webkit-progress-bar{background:var(--line)}.wish-book progress::-webkit-progress-value{background:linear-gradient(90deg,var(--his),var(--hers))}
+.wish-toolbar{padding:24px 0 18px}.wish-status-tabs{display:flex;gap:26px;border-bottom:1px solid var(--line)}.wish-status-tabs button{min-height:44px;padding:9px 0 13px;border:0;border-bottom:2px solid transparent;border-radius:0;background:none!important;font-size:14px;color:var(--muted)}.wish-status-tabs button[aria-pressed=true]{border-bottom-color:var(--copper);color:var(--ink-strong)}.wish-book .wish-book-filters{display:flex;gap:8px;flex-wrap:wrap;margin:17px 0 0}.wish-book .wish-book-filters button{min-height:40px;padding:8px 14px;font-size:11px;border:1px solid var(--line);border-radius:22px;background:var(--surface);color:var(--muted)}.wish-book .wish-book-filters button[aria-pressed=true]{background:var(--his-soft);border-color:var(--his);color:var(--his)}
+.wish-list-caption{display:flex;align-items:center;justify-content:space-between;margin:12px 0 7px;gap:15px}.wish-list-caption h2{font-size:19px;font-weight:400;margin:0;color:var(--ink-strong)}.wish-result-count{font-size:11px;color:var(--muted);white-space:nowrap}.wish-book-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:34px}.wish-book .wish-page{position:relative;display:grid;grid-template-columns:34px minmax(0,1fr);column-gap:12px;align-content:start;padding:26px 2px 23px;border:0;border-bottom:1px solid var(--line);background:transparent;box-shadow:none;transform:none;transition:background .2s}.wish-number{font:italic 14px Georgia;color:var(--muted);padding-top:4px}.wish-book .wish-page small{font-size:10px;letter-spacing:.04em;color:var(--muted)}.wish-book .wish-page h3{font-size:19px;font-weight:400;line-height:1.65;min-height:0;margin:8px 0 15px;color:var(--ink);overflow-wrap:anywhere}.wish-row-actions{grid-column:2;display:flex;gap:8px;flex-wrap:wrap}.wish-book .wish-page button{font-size:11px;min-height:40px;padding:8px 12px;margin:0;border-radius:20px;border:1px solid var(--line);background:transparent;color:var(--muted)}.wish-book .wish-page button:first-child{color:var(--his);border-color:var(--his)}.wish-book .wish-page button:nth-child(2){color:var(--hers);border-color:var(--hers)}.wish-book .wish-page button[aria-pressed=true]{background:var(--his-soft);border-color:var(--his);color:var(--his)}.wish-book .wish-page.done button:nth-child(2){background:var(--hers-soft);border-color:var(--hers);color:var(--hers)}.wish-book .wish-page.planned,.wish-book .wish-page.done{background:transparent;border-color:var(--line)}.wish-page.done .wish-number{color:var(--hers)}.wish-page.planned .wish-number{color:var(--his)}.wish-page.done .wish-row-copy h3:after{content:' ✓';color:var(--hers);font-size:14px}.wish-more{display:block;margin:28px auto 32px;padding:12px 25px;min-height:44px;border:1px solid var(--line);border-radius:24px;background:transparent;color:var(--ink)}.wish-more[hidden]{display:none}.wish-backup{margin:30px 0 0;padding:20px 0;border-block:1px solid #b6a09a25;color:#b6a9a9;font-size:12px}.wish-backup summary{cursor:pointer;min-height:28px}.wish-backup summary span{float:right;font-size:10px;opacity:.7}.wish-backup p{line-height:1.8}.wish-backup button{min-height:42px;font-size:11px;margin:8px 10px 0 0;padding:9px 14px;border-radius:4px;background:#bca2b108;border:1px solid #bba1b132;color:#d7c4cc}#wish100-status:empty{display:none}
+body[data-room=wishes] .wish-head{margin-top:38px;padding:28px 0 8px;background:transparent;border:0;box-shadow:none}body[data-room=wishes] .wish-head h2{font-weight:400;font-size:clamp(23px,3vw,32px);line-height:1.5;margin:14px 0;color:var(--ink-strong)}body[data-room=wishes] .wish-head .eyebrow{font-size:10px;color:var(--muted)}body[data-room=wishes] .wish-head p{font-size:13px;color:var(--muted)}body[data-room=wishes] .wish-form{margin-top:20px;gap:10px}body[data-room=wishes] .wish-form input{border:1px solid var(--line);background:#fffdf7;border-radius:6px;color:var(--ink);padding:14px 16px;font-size:14px}body[data-room=wishes] .wish-form button{border-radius:6px;background:var(--copper-deep);border:1px solid var(--copper-deep);color:#fff}body[data-room=wishes] .wish-item{background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow);transform:none;border-radius:8px;padding:25px}body[data-room=wishes] .wish-item>span{color:var(--his);font-size:19px}body[data-room=wishes] .wish-item p{font-size:18px;color:var(--ink)}body[data-room=wishes] .wish-item button{min-height:40px;font-size:11px;border-color:var(--line);color:var(--muted)}body[data-room=wishes] #export-wishes{font-size:11px;min-height:42px;background:transparent;border:1px solid var(--line);color:var(--muted)}
+body[data-room=wishes] :focus-visible{outline:2px solid var(--copper);outline-offset:4px}
+.wish-book-heading h1:focus{outline:none}
+@media(max-width:650px){.wish-book .wish-book-heading{grid-template-columns:minmax(0,1fr) 104px;gap:12px;padding:15px 0 27px}.wish-book-heading h1{font-size:29px;margin:14px 0}.wish-book-heading .wish-cover-copy>p{font-size:12px}.wish-book-heading .eyebrow{font-size:9px;letter-spacing:.02em}.wish-cover-object{width:95px;gap:8px;border-radius:3px 8px 8px 3px;box-shadow:-3px 2px #b8a88f,-5px 3px #51414a,8px 13px 25px #07050950}.wish-cover-object:after{inset:8px 6px 8px 11px}.wish-cover-object strong{font-size:36px}.wish-cover-object small{font-size:6px;letter-spacing:0}.wish-cover-object>span:not(.wish-ribbon){font-size:6px;letter-spacing:0}.wish-cover-object i{font-size:10px;margin-top:0}.wish-ribbon{width:7px;height:24px}.blue-ribbon{right:24px}.pink-ribbon{right:13px;height:29px}.wish-write-link{font-size:11px;line-height:1.6}.wish-summary{gap:22px;padding:18px 0}.wish-summary b{font-size:23px}.wish-summary p{font-size:10px}.wish-completion{display:block}.wish-book progress{width:100%;max-width:140px;margin-top:8px}.wish-toolbar{padding:18px 0 10px}.wish-status-tabs{gap:26px}.wish-book .wish-book-filters{gap:6px;margin-top:13px}.wish-book .wish-book-filters button{font-size:10px;padding:8px 11px;min-height:40px}.wish-list-caption{margin-top:18px}.wish-list-caption h2{font-size:17px}.wish-result-count{font-size:10px}.wish-book-grid{grid-template-columns:1fr}.wish-book .wish-page{padding:22px 0;grid-template-columns:30px minmax(0,1fr);column-gap:8px}.wish-book .wish-page h3{font-size:19px;margin:7px 0 12px}.wish-book .wish-page button{min-height:44px;padding:9px 15px}.wish-row-actions{gap:9px}.wish-backup summary span{font-size:9px}body[data-room=wishes] .wish-form button{width:100%;min-height:46px}body[data-room=wishes] .wish-list{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.wish-book *{transition:none!important;animation:none!important}}
+
+/* 米纸底上，备份区不要再用暗室浅字 */
+.wish-backup { color: var(--muted); border-block-color: var(--line); }
+.wish-backup button {
+  color: var(--muted);
+  background: transparent;
+  border-color: var(--line);
+}
+.wish-blue { color: var(--his); }
+.wish-pink { color: var(--hers); }
+
+
+/* 与照片房间、信件室同一量级：标题字重与留白，米纸外壳少一点蓝粉洗色 */
+body[data-room=wishes] {
+  background:
+    radial-gradient(ellipse at 8% 380px, rgba(86, 107, 135, 0.10), transparent 65%),
+    radial-gradient(ellipse at 94% 650px, rgba(150, 95, 121, 0.08), transparent 65%),
+    var(--bg);
+}
+.wish-book .wish-book-heading { padding: 20px 0 28px; }
+.wish-book-heading h1 {
+  font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", "Noto Sans SC", sans-serif;
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 600;
+  letter-spacing: .02em;
+  color: var(--ink-strong);
+}
+@media (max-width: 650px) {
+  .wish-book .wish-book-heading { padding: 14px 0 26px; }
+  .wish-book-heading h1 { font-size: clamp(30px, 8.6vw, 40px); }
+}

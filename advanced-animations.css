@@ -1,0 +1,514 @@
+/* 高级动画增强系统 - 让每个元素都动起来 */
+:root { --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+/* ========== 鼠标跟随光晕 ========== */
+body:before {
+  content: '';
+  position: fixed;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(199, 160, 123, 0.15), transparent 70%);
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.3s;
+  mix-blend-mode: screen;
+}
+
+/* ========== 背景粒子漂浮 ========== */
+.particle-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--copper);
+  border-radius: 50%;
+  opacity: 0.3;
+  animation: particle-float 20s linear infinite;
+}
+
+.particle:nth-child(1) { left: 10%; animation-delay: 0s; }
+.particle:nth-child(2) { left: 20%; animation-delay: 2s; }
+.particle:nth-child(3) { left: 30%; animation-delay: 4s; }
+.particle:nth-child(4) { left: 40%; animation-delay: 6s; }
+.particle:nth-child(5) { left: 50%; animation-delay: 8s; }
+.particle:nth-child(6) { left: 60%; animation-delay: 10s; }
+.particle:nth-child(7) { left: 70%; animation-delay: 12s; }
+.particle:nth-child(8) { left: 80%; animation-delay: 14s; }
+.particle:nth-child(9) { left: 90%; animation-delay: 16s; }
+
+@keyframes particle-float {
+  0% {
+    transform: translateY(100vh) translateX(0) scale(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.3;
+  }
+  90% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(-100px) translateX(100px) scale(1);
+    opacity: 0;
+  }
+}
+
+/* ========== 日期标签增强动画 ========== */
+.date-tag {
+  animation: tag-sway 3s ease-in-out infinite;
+  transition: transform 0.5s var(--ease-spring);
+}
+
+.date-tag:hover {
+  transform: rotate(0deg) scale(1.1) !important;
+  animation: tag-wiggle 0.6s ease-in-out;
+}
+
+@keyframes tag-sway {
+  0%, 100% { transform: rotate(-5deg) translateY(0); }
+  50% { transform: rotate(-3deg) translateY(-3px); }
+}
+
+@keyframes tag-wiggle {
+  0%, 100% { transform: rotate(0deg) scale(1.1); }
+  25% { transform: rotate(-8deg) scale(1.15); }
+  50% { transform: rotate(8deg) scale(1.15); }
+  75% { transform: rotate(-5deg) scale(1.12); }
+}
+
+/* ========== 引用文字打字机效果（特殊标记） ========== */
+.typewriter {
+  overflow: hidden;
+  white-space: nowrap;
+  animation: typing 3s steps(40) 0.5s both;
+  border-right: 2px solid var(--copper);
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+/* ========== 纸张褶皱动画 ========== */
+.paper-note,
+.envelope-paper {
+  position: relative;
+  animation: paper-flutter 5s ease-in-out infinite;
+}
+
+@keyframes paper-flutter {
+  0%, 100% {
+    box-shadow: 0 15px 40px #0003;
+    transform: rotate(-4deg);
+  }
+  50% {
+    box-shadow: 0 18px 45px #0004;
+    transform: rotate(-3.5deg) translateY(-2px);
+  }
+}
+
+/* ========== 兔子图标跳跃 ========== */
+.rabbit-mark,
+.kept-object img {
+  animation: rabbit-bounce 2s ease-in-out infinite;
+  transition: transform 0.3s var(--ease-spring);
+}
+
+.rabbit-mark:hover,
+.kept-object img:hover {
+  animation: rabbit-excited 0.8s ease-in-out;
+}
+
+@keyframes rabbit-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes rabbit-excited {
+  0%, 100% { transform: translateY(0) scale(1); }
+  25% { transform: translateY(-15px) scale(1.1) rotate(-10deg); }
+  50% { transform: translateY(-5px) scale(1.15) rotate(10deg); }
+  75% { transform: translateY(-12px) scale(1.08) rotate(-5deg); }
+}
+
+/* ========== 眉标闪烁 ========== */
+.eyebrow {
+  position: relative;
+  animation: eyebrow-pulse 4s ease-in-out infinite;
+}
+
+@keyframes eyebrow-pulse {
+  0%, 100% { opacity: 1; letter-spacing: 0.2em; }
+  50% { opacity: 0.7; letter-spacing: 0.25em; }
+}
+
+/* ========== 标题文字 ========== */
+/* 不再添加微光 text-shadow：在浅底上任何光晕/白影都会降低深色文字的对比度与可读性 */
+h1, h2 {
+  text-shadow: none;
+}
+
+/* ========== 边框光晕扫描 ========== */
+.letter-row,
+.photo,
+.wish-page {
+  position: relative;
+  overflow: hidden;
+}
+
+.letter-row:after,
+.photo:after,
+.wish-page:after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(199, 160, 123, 0.1) 50%,
+    transparent 70%
+  );
+  animation: scan-light 6s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes scan-light {
+  0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+  100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+/* ========== 输入框聚焦光效 ========== */
+input:focus,
+textarea:focus {
+  animation: input-glow 2s ease-in-out infinite;
+  box-shadow: 0 0 0 3px rgba(199, 160, 123, 0.2);
+}
+
+@keyframes input-glow {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(199, 160, 123, 0.2); }
+  50% { box-shadow: 0 0 0 5px rgba(199, 160, 123, 0.4); }
+}
+
+/* ========== 页脚照片摇摆 ========== */
+.footer-photo {
+  animation: photo-sway 4s ease-in-out infinite;
+  transition: transform 0.5s var(--ease-spring);
+}
+
+.footer-photo:hover {
+  animation: photo-spin 1s ease-out;
+}
+
+@keyframes photo-sway {
+  0%, 100% { transform: rotate(-5deg); }
+  50% { transform: rotate(-3deg) scale(1.02); }
+}
+
+@keyframes photo-spin {
+  0% { transform: rotate(-5deg) scale(1); }
+  50% { transform: rotate(10deg) scale(1.1); }
+  100% { transform: rotate(-5deg) scale(1); }
+}
+
+/* ========== 段落字符逐个淡入 ========== */
+.reader p {
+  animation: text-reveal 1.2s ease-out both;
+}
+
+.reader p:nth-child(2) { animation-delay: 0.1s; }
+.reader p:nth-child(3) { animation-delay: 0.2s; }
+.reader p:nth-child(4) { animation-delay: 0.3s; }
+.reader p:nth-child(5) { animation-delay: 0.4s; }
+
+@keyframes text-reveal {
+  from {
+    opacity: 0;
+    filter: blur(10px);
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+
+/* ========== 按钮涟漪扩散增强 ========== */
+button:after {
+  content: '';
+  position: absolute;
+  inset: 50% 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: var(--copper);
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+button:active:after {
+  animation: ripple-expand 0.6s ease-out;
+}
+
+@keyframes ripple-expand {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 0.5;
+  }
+  100% {
+    width: 300%;
+    height: 300%;
+    opacity: 0;
+  }
+}
+
+/* ========== 引用块闪光效果 ========== */
+blockquote {
+  position: relative;
+  overflow: hidden;
+}
+
+blockquote:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  animation: quote-shine 5s ease-in-out infinite;
+}
+
+@keyframes quote-shine {
+  0%, 100% { left: -100%; }
+  50% { left: 100%; }
+}
+
+/* ========== 图标旋转反馈 ========== */
+.primary span,
+.future-link span:last-child {
+  display: inline-block;
+  transition: transform 0.4s var(--ease-spring);
+}
+
+.primary:hover span,
+.future-link:hover span:last-child {
+  animation: arrow-dance 0.8s ease-in-out infinite;
+}
+
+@keyframes arrow-dance {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(6px); }
+}
+
+/* ========== 品牌标识脉冲 ========== */
+.brand {
+  position: relative;
+}
+
+.brand:before {
+  content: '';
+  position: absolute;
+  inset: -10px;
+  border: 2px solid var(--copper);
+  border-radius: 50%;
+  opacity: 0;
+  animation: brand-pulse 3s ease-out infinite;
+}
+
+@keyframes brand-pulse {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 0.3;
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+
+/* ========== 时间线竖线呼吸 ========== */
+.day-results:before {
+  animation: timeline-glow 4s ease-in-out infinite;
+}
+
+@keyframes timeline-glow {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 10px var(--copper);
+  }
+  50% {
+    opacity: 0.6;
+    box-shadow: 0 0 20px var(--copper);
+  }
+}
+
+/* ========== 场景内容卡片倾斜摇摆 ========== */
+.scene-content {
+  animation: card-tilt 6s ease-in-out infinite;
+}
+
+@keyframes card-tilt {
+  0%, 100% { transform: perspective(1000px) rotateY(0deg); }
+  50% { transform: perspective(1000px) rotateY(2deg); }
+}
+
+/* ========== 小纸条旋转 ========== */
+.little-note {
+  animation: note-wiggle 5s ease-in-out infinite;
+  transition: transform 0.6s var(--ease-spring);
+}
+
+.little-note:hover {
+  animation: note-spin 1.2s var(--ease-spring);
+}
+
+@keyframes note-wiggle {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(1deg); }
+}
+
+@keyframes note-spin {
+  0% { transform: rotate(-3deg) scale(1); }
+  25% { transform: rotate(15deg) scale(1.05); }
+  50% { transform: rotate(-10deg) scale(1.1); }
+  75% { transform: rotate(8deg) scale(1.05); }
+  100% { transform: rotate(1deg) scale(1); }
+}
+
+/* ========== 导航栏下划线波浪 ========== */
+.nav button:before {
+  animation: underline-wave 2s ease-in-out infinite;
+}
+
+@keyframes underline-wave {
+  0%, 100% { height: 2px; }
+  50% { height: 3px; }
+}
+
+/* ========== 加载骨架屏 ========== */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--surface) 25%,
+    var(--line) 50%,
+    var(--surface) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+  border-radius: 4px;
+}
+
+@keyframes skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ========== 星光闪烁装饰 ========== */
+.sparkle {
+  position: relative;
+}
+
+.sparkle:before,
+.sparkle:after {
+  content: '✦';
+  position: absolute;
+  color: var(--copper);
+  font-size: 12px;
+  opacity: 0;
+  animation: sparkle-twinkle 3s ease-in-out infinite;
+}
+
+.sparkle:before {
+  top: -10px;
+  right: -10px;
+  animation-delay: 0s;
+}
+
+.sparkle:after {
+  bottom: -10px;
+  left: -10px;
+  animation-delay: 1.5s;
+}
+
+@keyframes sparkle-twinkle {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1) rotate(180deg);
+  }
+}
+
+/* ========== 视差滚动效果 ========== */
+.parallax-slow {
+  transform: translateY(calc(var(--scroll) * -0.3px));
+}
+
+.parallax-fast {
+  transform: translateY(calc(var(--scroll) * -0.6px));
+}
+
+/* ========== 悬停放大镜效果 ========== */
+.photo img {
+  transition: transform 0.6s var(--ease-spring);
+  transform-origin: center center;
+}
+
+.photo:hover img {
+  transform: scale(1.15) rotate(3deg);
+  cursor: zoom-in;
+}
+
+/* ========== 表单元素脉冲边框 ========== */
+input:focus,
+textarea:focus,
+select:focus {
+  animation: border-pulse 2s ease-in-out infinite;
+}
+
+@keyframes border-pulse {
+  0%, 100% {
+    border-color: var(--line);
+    box-shadow: 0 0 0 0 rgba(199, 160, 123, 0);
+  }
+  50% {
+    border-color: var(--copper);
+    box-shadow: 0 0 0 4px rgba(199, 160, 123, 0.2);
+  }
+}
+
+/* ========== 减少动态效果模式 ========== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *:before,
+  *:after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

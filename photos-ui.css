@@ -1,0 +1,337 @@
+/* 照片房间：暖色相纸贴在米纸页上。
+   只作用于照片路由与看图器，不影响其他房间。
+   页面外壳跟随整站手账米纸；看图器仍用深色遮罩与深色控件。 */
+
+/* ---------- 本房间的外壳（浅底，继承整站色令） ---------- */
+body[data-room=photos] {
+  color: var(--ink);
+}
+
+body[data-room=photos] .nav button[aria-current=page] {
+  color: var(--copper-deep);
+  box-shadow: 0 2px var(--copper-deep);
+  font-weight: 600;
+}
+
+/* ---------- 标题 ---------- */
+.photos-head {
+  display: block;
+  max-width: none;
+  margin: 0;
+  padding: 20px 0 28px;
+}
+
+.photos-head .eyebrow {
+  color: var(--muted);
+}
+
+.photos-head h1 {
+  font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", "Noto Sans SC", sans-serif;
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 600;
+  line-height: 1.42;
+  margin: 14px 0 16px;
+  color: var(--ink-strong);
+  letter-spacing: .02em;
+}
+
+.photos-head .head-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.photos-head p {
+  color: var(--muted);
+  line-height: 1.9;
+  margin: 0;
+  max-width: 38em;
+  font-size: 15px;
+}
+
+.photos-head .xuan {
+  color: var(--his);
+  font-weight: 600;
+}
+
+.photos-head .ran {
+  color: var(--hers);
+  font-weight: 600;
+}
+
+.photos-count {
+  flex: none;
+  font: 400 11px/1.8 sans-serif;
+  letter-spacing: .14em;
+  color: var(--muted);
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+/* ---------- 墙面上的相纸 ---------- */
+.gallery--wall {
+  columns: 3;
+  column-gap: 30px;
+  padding: 0 0 70px;
+}
+
+.gallery--wall .photo {
+  break-inside: avoid;
+  margin: 0 0 28px;
+  padding: 12px 12px 0;
+  background: linear-gradient(178deg, #f0e7d8, #e6d5b7 68%, #dcc6a3);
+  border: 1px solid color-mix(in srgb, var(--copper-deep) 48%, transparent);
+  border-radius: 1px;
+  box-shadow:
+    0 12px 26px rgba(120, 90, 50, .16),
+    0 2px 6px rgba(120, 90, 50, .08),
+    0 1px 0 #fffdf5aa inset;
+  transform: rotate(var(--tilt, -.5deg));
+  transition: transform .45s cubic-bezier(.2, .75, .28, 1), box-shadow .45s;
+}
+
+.gallery--wall .photo:nth-child(3n+1) { --tilt: -.55deg; }
+.gallery--wall .photo:nth-child(3n+2) { --tilt: .4deg; }
+.gallery--wall .photo:nth-child(3n) { --tilt: -.2deg; }
+
+.gallery--wall .photo:hover {
+  transform: rotate(0deg) translateY(-4px);
+  box-shadow:
+    0 18px 32px rgba(120, 90, 50, .20),
+    0 4px 10px rgba(120, 90, 50, .10),
+    0 1px 0 #fffdf5aa inset;
+}
+
+.gallery--wall .photo button {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  overflow: hidden;
+  cursor: zoom-in;
+  box-shadow: inset 0 0 0 1px rgba(36, 32, 29, .12);
+}
+
+.gallery--wall .photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #e6d5b7;
+  transition: transform .6s ease;
+}
+
+.gallery--wall .photo button:hover img {
+  transform: scale(1.03);
+}
+
+.gallery--wall .photo figcaption {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 13px 4px 14px;
+  font-family: "Songti SC", "STSong", "SimSun", "Noto Serif CJK SC", "Noto Serif SC", serif;
+  font-size: 12px;
+  letter-spacing: .02em;
+  color: var(--ink-strong);
+}
+
+.gallery--wall .photo figcaption b {
+  flex: none;
+  font: 400 10px/1 Georgia, serif;
+  letter-spacing: .12em;
+  color: var(--copper-deep);
+}
+
+.gallery--wall .photo:focus-within {
+  outline: 2px solid var(--copper);
+  outline-offset: 5px;
+}
+
+/* 墙面末尾的手写便条，顺带把最后一列的空档补上 */
+.gallery--wall .photo-note {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 320px;
+  padding: 86px 26px 34px;
+  background:
+    url("assets/rabbit-line.svg") center 28px / 54px no-repeat,
+    linear-gradient(178deg, #f0e7d8, #e6d5b7 70%, #dcc6a3);
+  border: 1px dashed color-mix(in srgb, var(--copper-deep) 62%, transparent);
+  box-shadow:
+    0 12px 26px rgba(120, 90, 50, .16),
+    0 2px 6px rgba(120, 90, 50, .08);
+  --tilt: -1.1deg;
+}
+
+.gallery--wall .photo-note p {
+  margin: 0;
+  font-family: "Songti SC", "STSong", "SimSun", "Noto Serif CJK SC", "Noto Serif SC", serif;
+  font-size: 15px;
+  line-height: 2.15;
+  color: var(--ink-strong);
+  text-align: center;
+  letter-spacing: .04em;
+}
+
+.gallery--wall .photo-note small {
+  display: block;
+  margin-top: 16px;
+  font: italic 400 11px/1.6 Georgia, serif;
+  letter-spacing: .16em;
+  color: var(--copper-deep);
+}
+
+/* ---------- 看图器：深色遮罩与深色控件保留 ---------- */
+.photo-viewer {
+  width: max-content;
+  max-width: min(1080px, 94vw);
+  max-height: 96svh;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  color: #f0e7d8;
+}
+
+.photo-viewer::backdrop {
+  background: #171514f0;
+  backdrop-filter: blur(9px);
+}
+
+/* 相框直接长在图片上，尺寸由脚本按视口算好，避免空白相纸。 */
+.viewer-frame {
+  display: flex;
+  justify-content: center;
+}
+
+.viewer-frame img {
+  display: block;
+  padding: 13px 13px 0;
+  background: linear-gradient(178deg, #f0e7d8, #e6d5b7);
+  border: 1px solid #73513a99;
+  box-shadow: 0 30px 70px #000000a6;
+}
+
+.viewer-bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 6px 6px;
+  color: #f0e7d8;
+}
+
+.viewer-meta {
+  flex: 1;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  min-width: 0;
+}
+
+.viewer-meta span {
+  font-family: "Songti SC", "STSong", "SimSun", "Noto Serif CJK SC", "Noto Serif SC", serif;
+  font-size: 14px;
+  letter-spacing: .03em;
+  color: #f0e7d8;
+}
+
+.viewer-meta small {
+  font: 400 10px/1 Georgia, serif;
+  letter-spacing: .16em;
+  color: #bdb1a3;
+}
+
+.viewer-nav {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid #73513a;
+  border-radius: 50%;
+  background: #24201d;
+  color: #f0e7d8;
+  font-size: 15px;
+  line-height: 1;
+}
+
+.viewer-nav:hover {
+  border-color: #c7a07b;
+  background: #2e2724;
+}
+
+.viewer-nav[disabled] {
+  opacity: .32;
+  cursor: default;
+}
+
+#close-photo {
+  flex: none;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid #73513a;
+  border-radius: 1px;
+  background: none;
+  color: #bdb1a3;
+  font-size: 12px;
+  letter-spacing: .06em;
+}
+
+#close-photo:hover {
+  border-color: #c7a07b;
+  color: #f0e7d8;
+}
+
+.photo-viewer .hint {
+  font-size: 10.5px;
+  letter-spacing: .1em;
+  color: #bdb1a3;
+  text-align: center;
+  padding: 2px 0 4px;
+}
+
+/* ---------- 手机 ---------- */
+@media (max-width: 650px) {
+  .photos-head { padding: 14px 0 26px; }
+  .photos-head h1 { font-size: clamp(30px, 8.6vw, 40px); }
+  .photos-head .head-row { align-items: flex-start; }
+  .photos-count { padding: 0; border: 0; letter-spacing: .12em; }
+  .gallery--wall { columns: 2; column-gap: 15px; padding-bottom: 52px; }
+  .gallery--wall .photo {
+    margin-bottom: 16px;
+    padding: 8px 8px 0;
+    transform: rotate(var(--tilt, -.35deg));
+  }
+  .gallery--wall .photo:nth-child(3n+1) { --tilt: -.35deg; }
+  .gallery--wall .photo:nth-child(3n+2) { --tilt: .28deg; }
+  .gallery--wall .photo:nth-child(3n) { --tilt: 0deg; }
+  .gallery--wall .photo figcaption { padding: 10px 2px 11px; font-size: 11px; gap: 8px; }
+  .gallery--wall .photo figcaption b { font-size: 9px; }
+  .gallery--wall .photo-note {
+    min-height: 210px;
+    padding: 64px 16px 22px;
+    background-size: 44px, auto;
+    background-position: center 18px, 0 0;
+  }
+  .gallery--wall .photo-note p { font-size: 12.5px; line-height: 2; }
+  .gallery--wall .photo-note small { margin-top: 10px; font-size: 10px; }
+  .gallery-note { margin: -24px 0 52px; }
+  .photo-viewer { max-width: 96vw; }
+  .viewer-frame img { padding: 9px 9px 0; }
+  .viewer-bar { flex-wrap: wrap; gap: 10px; padding: 12px 4px 4px; }
+  .viewer-meta { order: 1; flex: 1 1 100%; }
+  .viewer-nav { order: 2; }
+  #close-photo { order: 3; margin-left: auto; }
+  .photo-viewer .hint { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery--wall .photo { transform: none; transition: none; }
+  .gallery--wall .photo img { transition: none; }
+}

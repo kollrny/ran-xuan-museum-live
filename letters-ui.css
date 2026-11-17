@@ -1,0 +1,113 @@
+/* 信件室 / 拆信 / 长信阅读 —— 仅作用于 letters 与 read 两个路由，不覆盖其他房间。 */
+
+/* ---------- 信件室 ---------- */
+.letter-room-head{display:block;max-width:none;margin:0;padding:20px 0 28px}
+.letter-room-head h1{font-family:"Microsoft YaHei","PingFang SC","Noto Sans CJK SC","Noto Sans SC",sans-serif;font-size:clamp(32px,5vw,52px);font-weight:600;line-height:1.42;margin:14px 0 16px;color:var(--ink-strong);letter-spacing:.02em}
+.letter-room-head p{color:var(--muted);line-height:var(--leading-relaxed);max-width:48em;margin:0;font-size:15px}
+.letter-room-head .xuan{color:var(--his);font-weight:600}
+.letter-room-head .ran{color:var(--hers);font-weight:600}
+
+.letter-directions{display:flex;flex-wrap:nowrap;gap:var(--space-4);border-bottom:1px solid var(--line);margin:24px 0 28px}
+.letter-directions button{display:flex;align-items:baseline;gap:8px;min-height:48px;padding:var(--space-1) 0;border:0;border-bottom:2px solid transparent;border-radius:0;background:none;color:var(--muted);font-size:var(--text-sm);letter-spacing:.04em;transition:color .25s var(--ease), border-color .25s var(--ease)}
+.letter-directions button b{font:400 var(--text-xs)/1 Georgia;letter-spacing:.08em}
+.letter-directions button[aria-pressed=true]{border-color:var(--copper);color:var(--ink)}
+.letter-directions button[aria-pressed=true] b{color:var(--copper)}
+
+.letter-shelves{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-4)}
+.mail-card{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:var(--space-3);min-height:200px;padding:var(--space-5) var(--space-4);text-align:left;border:1px solid color-mix(in srgb, var(--copper-deep) 42%, transparent);border-radius:1px;color:var(--ink);background:linear-gradient(178deg,var(--surface),var(--paper) 70%,#f0e7d8);box-shadow:0 8px 24px rgba(120,90,50,0.08);overflow:hidden;transition:all .3s var(--ease)}
+.mail-card:after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(25deg,transparent 49.5%,#c6ab871c 50%,transparent 50.5%)}
+.mail-card>*{position:relative;z-index:1}
+.mail-card small{color:var(--muted);font-size:var(--text-xs);letter-spacing:.08em}
+.mail-card h2{margin:var(--space-1) 0 0;font-family:"Songti SC","STSong","SimSun","Noto Serif CJK SC","Noto Serif SC",serif;font-size:28px;font-weight:400;line-height:1.45;color:var(--ink-strong)}
+.mail-card .mail-foot{margin-top:auto;font-size:var(--text-sm);color:var(--muted);letter-spacing:.03em}
+.mail-no{position:absolute;top:var(--space-3);right:var(--space-3);z-index:1;font:400 var(--text-xs)/1 Georgia;letter-spacing:.14em;color:var(--muted);opacity:.7;width:34px;height:34px;display:grid;place-items:center;border:1px solid var(--line);border-radius:50%;background:var(--surface)}
+
+button.mail-card{cursor:pointer}
+button.mail-card:hover{transform:translateY(-4px);border-color:var(--copper);box-shadow:var(--shadow-lift)}
+button.mail-card:focus-visible{outline:2px solid var(--copper);outline-offset:4px}
+
+.mail-card.mail-draft{border-style:dashed;border-color:var(--line);background:#f6eedd;box-shadow:none;color:var(--muted)}
+.mail-card.mail-draft:after{display:none}
+.mail-card.mail-draft small{color:var(--muted);opacity:.7}
+.mail-card.mail-draft h2{color:var(--muted)}
+.mail-card.mail-draft .mail-foot{color:var(--muted);opacity:.6;font-style:italic}
+
+.letter-empty{display:grid;place-content:center;text-align:center;min-height:280px;padding:var(--space-6) var(--space-4);border:1px dashed color-mix(in srgb, var(--copper-deep) 48%, transparent);border-radius:1px;color:var(--muted);background:transparent}
+.letter-empty .eyebrow{color:var(--muted);opacity:.7}
+.letter-empty h2{margin:var(--space-3) 0 var(--space-2);font-size:26px;line-height:1.55;color:var(--ink)}
+.letter-empty p{margin:0 auto;max-width:32em;line-height:var(--leading-relaxed);color:var(--muted)}
+
+/* ---------- 拆信信封 ---------- */
+.letter-opening{padding:64px 0 6px}
+.letter-desk{position:relative;width:95%;max-width:410px;margin:auto;aspect-ratio:1.47;perspective:1200px}
+.opening-mail{position:absolute;inset:25% 3% 3%;border-radius:3px;background:linear-gradient(145deg,#ad784e,#e8b987 56%,#9b613e);box-shadow:0 24px 48px #130a0b9c;transform:rotate(-4deg);isolation:isolate}
+.mail-paper{position:absolute;inset:7% 8% 8%;z-index:1;display:grid;place-content:center;gap:8px;padding:14px 12px;text-align:center;color:#462820;background:linear-gradient(127deg,#fff6e4,#e8c69e);box-shadow:0 4px 18px #3e211a5c;opacity:0;overflow:hidden;transition:transform .78s cubic-bezier(.2,.75,.28,1),opacity .23s}
+.mail-paper small{font:400 10px/1.6 Georgia;letter-spacing:.18em;color:#8a6547}
+.mail-preview{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin:0;font-family:"Songti SC","STSong","SimSun","Noto Serif CJK SC","Noto Serif SC",serif;font-size:16px;line-height:1.95;color:#462820}
+.mail-sign{font:400 11px/1.6 Georgia;letter-spacing:.1em;color:#8a6547}
+.mail-pocket{position:absolute;inset:0;z-index:2;clip-path:polygon(0 0,50% 70%,100% 0,100% 100%,0 100%);background:repeating-linear-gradient(110deg,#ffffff08 0 1px,transparent 1px 3px),linear-gradient(24deg,#d6a371,#e9bd89 59%,#b78254)}
+.mail-flap{position:absolute;inset:0 0 auto;height:73%;z-index:3;transform-origin:top center;background:linear-gradient(155deg,#f5d09c,#d09b65);clip-path:polygon(0 0,100% 0,53% 96%,50% 100%,47% 96%);transition:transform .52s ease-in-out,z-index 0s .25s;display:grid;place-content:center;padding-bottom:5%;color:#69442e;font:italic 24px Georgia}
+.letter-desk[data-open=true] .mail-flap{transform:rotateX(175deg);z-index:0}
+.letter-desk[data-open=true] .mail-paper{transform:translateY(-52%) rotate(3deg);opacity:1;transition-delay:.32s}
+
+/* 拆信弹窗优化 */
+.letter-opening-dialog{width:min(680px,94vw);max-height:92svh;overflow:auto;padding:var(--space-4) var(--space-5);border:1px solid var(--line);border-radius:2px;color:var(--ink);background:var(--surface)}
+.letter-opening-dialog::backdrop{background:rgba(50,40,30,0.5);backdrop-filter:blur(8px)}
+.mail-dialog-top{display:flex;justify-content:space-between;align-items:center;gap:var(--space-3)}
+.mail-dialog-ordinal{font:400 var(--text-xs)/var(--leading-relaxed) sans-serif;letter-spacing:.2em;color:var(--muted)}
+.mail-dialog-close{min-height:44px;padding:var(--space-1);border:0;background:none;color:var(--muted);font-size:var(--text-base);transition:color .25s var(--ease)}
+.mail-dialog-close:hover{color:var(--ink)}
+.mail-dialog-title{margin:var(--space-4) 0 var(--space-2);font-size:clamp(28px,3.4vw,36px);font-weight:400;line-height:1.45;color:var(--ink)}
+.mail-dialog-meta{margin:0;font-size:var(--text-xs);letter-spacing:.04em;color:var(--muted)}
+.mail-open-actions{display:flex;justify-content:center;gap:var(--space-3);flex-wrap:wrap;margin:var(--space-5) 0 var(--space-2)}
+.mail-open-actions button{min-height:44px;padding:var(--space-2) var(--space-4);font-size:var(--text-sm);letter-spacing:.04em}
+#unseal-letter{background:var(--deep);border-color:var(--copper)}
+.mail-open-actions button:hover{border-color:var(--copper)}
+
+/* ---------- 长信阅读 ---------- */
+.reader-top{display:flex;justify-content:space-between;align-items:center;gap:var(--space-3);margin:var(--space-3) 0 var(--space-5);font-size:var(--text-xs)}
+.reader-top .text-btn{color:var(--copper)}
+.reader--letter{max-width:760px;margin:0 auto var(--space-8);padding:clamp(48px,6vw,72px) clamp(32px,6vw,68px);border-radius:4px}
+.reader--letter .letter-head{display:block;max-width:none;margin:0;padding:0 0 var(--space-4);border-bottom:1px solid var(--line)}
+.reader--letter .eyebrow{color:var(--muted);opacity:.7}
+.reader--letter h1{margin:var(--space-2) 0 var(--space-2);font-size:clamp(36px,4.4vw,44px);line-height:1.45;color:var(--ink)}
+.reader--letter .reader-date{margin:0;font:400 var(--text-xs)/var(--leading-relaxed) sans-serif;letter-spacing:.06em;color:var(--muted)}
+.letter-body{margin-top:var(--space-6);color:var(--ink);font-family:"Songti SC","STSong","SimSun","Noto Serif CJK SC","Noto Serif SC",serif;font-size:18px;line-height:2.1}
+.reader--letter .letter-body p{margin:0;text-indent:0;line-height:2.1}
+.reader--letter .letter-body .verse{line-height:2.0}
+.reader--letter .letter-body .prose{text-indent:2em;margin-top:1.4em}
+.reader--letter .letter-body .verse+.prose,
+.reader--letter .letter-body .prose+.verse{margin-top:1.9em}
+.reader--letter .letter-body p:last-child{margin-bottom:0}
+.letter-sign{margin-top:var(--space-6);text-align:right;font-family:"Songti SC","STSong","SimSun","Noto Serif CJK SC","Noto Serif SC",serif;font-size:17px;color:var(--muted);letter-spacing:.1em}
+.reader--letter .reader-mark{display:flex;gap:var(--space-3);align-items:center;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:var(--space-4);margin-top:var(--space-5)}
+.reader--letter .reader-mark button{color:var(--ink);border-color:var(--line)}
+.reader--letter .reader-mark .small{color:var(--muted)}
+
+/* ---------- 手机 ---------- */
+@media(max-width:650px){
+  .letter-room-head{padding:14px 0 26px}
+  .letter-room-head h1{font-size:clamp(30px,8.6vw,40px)}
+  .letter-directions{gap:var(--space-3);margin-bottom:var(--space-4)}
+  .letter-directions button{font-size:var(--text-xs)}
+  .letter-shelves{grid-template-columns:1fr;gap:var(--space-3)}
+  .mail-card{min-height:0;padding:var(--space-4) var(--space-3);gap:var(--space-2)}
+  .mail-card h2{font-size:26px}
+  .mail-card .mail-foot{margin-top:var(--space-2)}
+  .mail-no{top:var(--space-2);right:var(--space-2)}
+  .letter-empty{min-height:240px;padding:var(--space-5) var(--space-3)}
+  .letter-opening-dialog{padding:var(--space-4) var(--space-3)}
+  .letter-opening{padding:var(--space-6) 0 var(--space-3)}
+  .mail-open-actions{gap:var(--space-2);margin-top:var(--space-4)}
+  .mail-open-actions button{flex:1;min-width:120px;padding:var(--space-2) var(--space-3);font-size:var(--text-xs)}
+  .reader-top{margin:var(--space-2) 0 var(--space-3);gap:var(--space-2)}
+  .reader--letter{padding:var(--space-4) var(--space-3);margin-bottom:var(--space-6)}
+  .letter-body{margin-top:var(--space-4);font-size:17px;line-height:2.08}
+  .reader--letter .letter-body p{line-height:2.08}
+  .reader--letter .letter-body .verse{line-height:2.0}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .mail-card,button.mail-card{transition:none!important}
+  .letter-opening-dialog *,.letter-desk *{transition:none!important;animation:none!important}
+}

@@ -1,0 +1,341 @@
+/* Weekly reading layout. All materials derive from the shared dark palette. */
+body[data-room=timeline]{color:var(--ink)}
+
+/* 标题区域优化 */
+.time-intro{min-height:0;padding:var(--space-6) 0 var(--space-8);border-radius:0;border:0;box-shadow:none;background:transparent}
+.time-intro h1{font-size:clamp(44px,5.5vw,68px);line-height:1.4;letter-spacing:.02em;font-weight:700;color:#241d15;font-family:"Microsoft YaHei","PingFang SC",sans-serif}
+.time-intro h1 span{font-weight:700;color:#241d15;font-style:normal;border-bottom:3px solid #c06b8a;padding-bottom:2px}
+.time-intro p{font-size:var(--text-base);line-height:var(--leading-relaxed);color:var(--muted);max-width:48em}
+.time-intro:before{content:none}
+.time-intro:after{content:none}
+.time-intro .whisper{margin-top:var(--space-4);letter-spacing:.08em;font-size:var(--text-sm);opacity:.75}
+
+/* 筛选控制区域 */
+.time-controls{padding:var(--space-5) 0;background:transparent;border-bottom:1px solid var(--line)}
+
+/* 筛选按钮组优化 */
+.filters button,.months button{
+  border-radius:24px;
+  min-height:44px;
+  padding:var(--space-2) var(--space-3);
+  color:var(--muted);
+  font-size:var(--text-sm);
+  background:transparent;
+  border:1px solid var(--line);
+  transition:all .25s var(--ease);
+  cursor:pointer;
+}
+.filters button[aria-pressed=true],.months button[aria-pressed=true]{
+  background:var(--deep);
+  color:var(--ink);
+  border-color:var(--copper);
+  box-shadow:0 4px 12px rgba(226,176,119,0.2);
+}
+.filters{display:flex;gap:var(--space-2);flex-wrap:wrap;margin-bottom:var(--space-4)}
+
+/* 月份导航优化 */
+.months{
+  display:flex;
+  flex-wrap:wrap;
+  gap:var(--space-2);
+  padding-top:var(--space-3);
+  border-top:1px solid var(--line);
+}
+.months span{font-size:var(--text-xs);color:var(--muted);opacity:.7;margin-left:auto;white-space:nowrap}
+
+/* 月份章节标题 */
+.month-chapter{
+  position:relative;
+  padding:var(--space-6) 0 var(--space-4);
+  border:0;
+  border-top:1px solid var(--line);
+  border-radius:0;
+  margin:var(--space-6) 0 var(--space-5);
+  background:transparent;
+  box-shadow:none;
+}
+.month-chapter:before,.month-chapter:after{content:none}
+
+.chapter-title{align-items:flex-start;display:flex;gap:var(--space-4)}
+.chapter-title h2{
+  font-size:clamp(32px,3.8vw,48px);
+  color:var(--ink-strong);
+  line-height:1.4;
+  text-wrap:balance;
+  margin:0;
+  font-weight:600;
+  font-family:"Microsoft YaHei","PingFang SC",sans-serif;
+}
+.chapter-month{color:var(--copper);font-weight:400}
+.chapter-seal{color:var(--muted);font-size:var(--text-xs);opacity:.7}
+.chapter-footnote,.week-period{font-size:var(--text-sm);color:var(--muted);line-height:var(--leading-relaxed);opacity:.8}
+.week-period{margin:var(--space-3) 0}
+
+/* 周卷标签组 */
+.week-tabs{display:flex;gap:var(--space-3);margin:var(--space-4) 0;flex-wrap:wrap}
+.week-tabs button{
+  background:transparent;
+  color:var(--muted);
+  border:1px solid var(--line);
+  border-radius:6px;
+  min-height:64px;
+  padding:var(--space-3);
+  position:relative;
+  transition:all .25s var(--ease);
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  justify-content:center;
+}
+.week-tabs button small{color:var(--muted);font-size:var(--text-xs);opacity:.7}
+.week-tabs button[aria-pressed=true]{
+  background:rgba(139,111,79,0.15);
+  color:var(--ink);
+  border-color:var(--copper);
+  box-shadow:0 2px 8px rgba(0,0,0,0.15),inset 0 -2px var(--copper);
+  transform:translateY(-1px);
+}
+.week-tabs button[aria-pressed=true] small{color:var(--copper);opacity:1}
+
+/* 周报正文 */
+.week-editorial{
+  display:grid;
+  grid-template-columns:100px 1fr;
+  gap:var(--space-5);
+  padding:var(--space-5) 0;
+  border-bottom:1px solid var(--line);
+}
+.week-editorial>span{font-size:var(--text-xs);color:var(--copper);padding-top:var(--space-1);letter-spacing:.1em;opacity:.9}
+.week-editorial p{
+  font:18px/2.1 "Songti SC","SimSun",serif;
+  color:var(--ink);
+  margin:0;
+  max-width:760px;
+  text-wrap:pretty;
+}
+
+/* 翻页控制 */
+.week-paging{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:var(--space-4);
+  padding-top:var(--space-4);
+}
+.week-paging button{
+  background:transparent;
+  color:var(--ink);
+  border:1px solid var(--line);
+  border-radius:6px;
+  min-height:44px;
+  padding:var(--space-2) var(--space-3);
+  font-size:var(--text-sm);
+  transition:all .25s var(--ease);
+}
+.week-paging button:disabled{opacity:.4;cursor:default}
+.week-paging span{font-size:var(--text-xs);color:var(--muted)}
+
+/* 日期时间线 */
+.day-scene{margin-bottom:var(--space-6)}
+.scene-no{font-size:48px;opacity:.08}
+.day-date{padding-top:var(--space-4)}
+.day-date b{
+  background:transparent;
+  color:var(--copper);
+  border-color:var(--line);
+  box-shadow:none;
+  font-size:26px;
+}
+.day-date span,.day-date small{color:var(--muted);font-size:var(--text-xs)}
+.day-date:after{background:var(--copper);box-shadow:0 0 0 5px var(--bg)}
+
+/* 场景卡片 */
+.day-scene .scene-content{
+  padding:var(--space-5) var(--space-6);
+  border:0;
+  border-bottom:1px solid var(--line);
+  border-radius:6px;
+  background:transparent;
+  color:var(--ink);
+  box-shadow:none;
+  transform:none;
+  transition:all .25s var(--ease);
+}
+.day-scene .scene-content h2{
+  color:var(--ink);
+  font-size:clamp(28px,3.2vw,40px);
+  line-height:1.45;
+  margin-bottom:var(--space-3);
+}
+.day-scene .scene-content p{
+  color:var(--muted);
+  line-height:var(--leading-relaxed);
+  text-wrap:pretty;
+  font-size:var(--text-base);
+}
+.day-scene .scene-content .eyebrow{color:var(--copper);font-size:var(--text-xs);opacity:.9}
+
+/* 引用块 */
+.day-scene blockquote[data-person],.story-dialog blockquote[data-person]{
+  padding:var(--space-4) var(--space-4);
+  margin-inline:0;
+  border-left:3px solid var(--copper);
+  border-radius:0 6px 6px 0;
+  background:rgba(139,111,79,0.08);
+  color:var(--ink);
+  line-height:var(--leading-relaxed);
+  font-size:var(--text-base);
+  transition:all .25s var(--ease);
+}
+.day-scene blockquote small,.story-dialog blockquote small{
+  display:block;
+  color:var(--muted);
+  font:var(--text-xs)/1.8 sans-serif;
+  margin-top:var(--space-2);
+  opacity:.8;
+}
+
+/* 场景操作按钮 */
+.scene-actions{display:flex;gap:var(--space-2);flex-wrap:wrap}
+.scene-actions button{
+  min-height:44px;
+  border-color:var(--line);
+  color:var(--ink);
+  border-radius:6px;
+  font-size:var(--text-sm);
+  padding:var(--space-2) var(--space-3);
+  transition:all .25s var(--ease);
+}
+
+/* 故事弹窗 */
+.story-dialog,.story-dialog.ink,.story-dialog.paper{
+  background:var(--surface);
+  color:var(--ink);
+  border:1px solid var(--line);
+  box-shadow:0 25px 90px #0008;
+  max-height:88dvh;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  scrollbar-width:thin;
+  scrollbar-color:var(--copper) transparent;
+  border-radius:8px;
+  padding:var(--space-5) var(--space-6);
+}
+.story-dialog p,.story-dialog small{color:var(--muted);line-height:var(--leading-relaxed)}
+.story-dialog h2{color:var(--ink);line-height:1.45;font-size:36px;margin:0 0 var(--space-4)}
+
+@media(max-width:650px){
+  .month-chapter{padding:var(--space-4) 0 var(--space-3);margin:var(--space-4) 0 var(--space-3)}
+  .chapter-title{flex-direction:column;gap:var(--space-2)}
+  .chapter-title h2{font-size:32px}
+  .week-tabs{gap:var(--space-2)}
+  .week-tabs button{min-height:56px;padding:var(--space-2)}
+  .week-editorial{grid-template-columns:80px 1fr;gap:var(--space-3);padding:var(--space-3) 0}
+  .week-editorial>span{font-size:var(--text-xs)}
+  .week-editorial p{font-size:17px;line-height:2.05}
+  .day-scene{margin-bottom:var(--space-4)}
+  .day-scene .scene-content{padding:var(--space-4) var(--space-3)}
+  .day-scene .scene-content h2{font-size:26px;margin-bottom:var(--space-2)}
+  .story-dialog{padding:var(--space-4) var(--space-3)}
+  .story-dialog h2{font-size:28px}
+  .scene-actions button{font-size:var(--text-xs);padding:var(--space-1) var(--space-2)}
+}
+.story-dialog .now-note{
+  background:#f6f0e2;
+  color:var(--muted);
+  border-left:3px solid var(--copper);
+  border-radius:0 4px 4px 0;
+  padding:20px;
+}
+
+/* 空白状态 */
+.empty-days{
+  padding:40px 32px;
+  background:transparent;
+  color:var(--muted);
+  border:1px dashed var(--line);
+  line-height:2;
+  text-align:center;
+  border-radius:6px;
+}
+
+/* 时间线结尾 */
+.time-ending{color:var(--muted);padding:60px 0}
+.time-ending h2{color:var(--ink);font-size:clamp(28px,3.5vw,40px)}
+
+/* 纪念邀请 */
+.confession-invitation small,.confession-invitation em{color:var(--muted)}
+
+/* 搜索栏 */
+.search-row{flex-wrap:wrap;gap:12px;margin-bottom:20px}
+.search-row input{
+  min-width:0;
+  color:var(--ink);
+  background:#fffdf7;
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:12px 16px;
+  font-size:14px;
+}
+#clear-search[hidden]{display:none}
+#clear-search{
+  background:transparent;
+  color:var(--copper);
+  border:1px solid var(--line);
+  border-radius:6px;
+  min-height:44px;
+  padding:10px 18px;
+  font-size:13px;
+}
+
+@keyframes week-in{from{opacity:.4;transform:translateY(5px)}to{opacity:1;transform:none}}
+
+@media(max-width:768px){
+  .time-intro{min-height:0;padding:32px 0 40px;border-radius:0}
+  .time-intro h1{font-size:38px;line-height:1.4}
+  .time-intro .whisper{font-size:12px;margin-top:20px}
+
+  .filters{gap:8px}
+  .filters button{font-size:12px;padding:8px 16px}
+
+  .months{gap:8px}
+  .months button{font-size:12px;padding:8px 14px}
+  .months span{font-size:11px}
+
+  .month-chapter{padding:28px 0 20px;margin:24px 0 32px}
+  .chapter-title h2{font-size:28px}
+
+  .week-tabs{gap:8px}
+  .week-tabs button{padding:12px 10px;min-height:64px}
+  .week-tabs em{letter-spacing:0}
+
+  .week-editorial{grid-template-columns:1fr;gap:12px;padding:24px 0}
+  .week-editorial>span{font-size:11px}
+  .week-editorial p{font-size:17px;line-height:1.95}
+
+  .week-paging{flex-wrap:wrap}
+  .week-paging button{padding:10px 14px;font-size:12px}
+  .week-paging span{font-size:10px}
+
+  .day-scene .scene-content{padding:28px 20px}
+  .day-scene .scene-content h2{font-size:26px}
+  .day-scene .scene-content p{font-size:15px}
+
+  .day-scene[data-visual=album] .scene-content{padding-top:52px}
+  .day-scene[data-visual=album] .scene-content:before{left:24px;font-size:9px}
+
+  .day-scene blockquote[data-person],.story-dialog blockquote[data-person]{padding:16px 18px;font-size:14px}
+
+  .story-dialog{max-width:calc(100vw - 24px);padding:28px 24px}
+  .story-dialog h2{font-size:26px}
+
+  .search-row label{flex-basis:100%}
+  .search-row input{flex:1 1 160px;font-size:13px}
+
+  .day-scene:hover .scene-content{translate:none}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .week-editorial{animation:none}
+  .scene-content{transition:none}
+}

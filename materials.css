@@ -1,0 +1,445 @@
+/* Shared material system: colors, atmosphere, paper and hand-drawn edges. */
+:root {
+  color-scheme: light;
+
+  /* ===== 手账剪贴簿配色系统（米纸底 + 胶带 + 贴纸 + 涂鸦） ===== */
+  /* 背景色 - 手账米纸，带一点旧纸张的暖与斑驳 */
+  --bg: #f3ecdc;              /* 主背景：手账米纸 */
+  --surface: #fffdf5;          /* 卡片背景：贴纸/便签的白 */
+  --paper: #faf3e2;            /* 纸张：牛皮纸内页 */
+  --surface-warm: #f6ecd6;     /* 暖杏卡面 */
+
+  /* 文字色 - 手写感深棕，强对比 */
+  --ink: #3b2f24;              /* 主文字：深棕（钢笔水） */
+  --ink-strong: #241a11;       /* 强化文字：更深的墨棕，标题用 */
+  --muted: #6d5f4e;            /* 次要文字：暖灰棕 */
+
+  /* 强调色 - 蜂蜜金棕 */
+  --copper: #b0804a;           /* 蜂蜜金棕：主要强调色 */
+  --copper-deep: #8a5f2e;      /* 深蜂蜜金：悬停/强调 */
+  --gold: #a0783f;             /* 金色 */
+  --accent: #c07a94;           /* 玫瑰粉 */
+
+  /* 双人记号色 - 盛梓轩蓝 / 方然粉 */
+  --his: #4a6fa5;              /* 盛梓轩 · 蓝 */
+  --his-soft: #e8eef6;         /* 蓝 · 浅底 */
+  --hers: #c06b8a;             /* 方然 · 粉 */
+  --hers-soft: #f7e3eb;        /* 粉 · 浅底 */
+
+  /* ===== 手账元素色（胶带 / 贴纸 / 涂鸦） ===== */
+  --tape-mint: #bcd9c0;        /* 薄荷绿和纸胶带 */
+  --tape-pink: #efc4d2;        /* 粉红和纸胶带 */
+  --tape-yellow: #f3d78a;      /* 奶黄和纸胶带 */
+  --tape-blue: #b9d0e8;        /* 浅蓝和纸胶带 */
+  --sticker-red: #d9645a;      /* 贴纸红（小圆点/爱心） */
+  --sticker-coral: #e88a6a;    /* 珊瑚橙贴纸 */
+  --doodle: #7a6a52;           /* 手绘线稿色（铅笔棕） */
+  --doodle-soft: #a89a80;      /* 手绘浅线稿 */
+
+  /* 功能色 */
+  --deep: #b0804a;             /* 主按钮：蜂蜜金棕 */
+  --line: #d8cbb4;             /* 边框：暖米灰 */
+  --line-strong: #c4b391;      /* 强调边框：暖米深 */
+  --shadow: 0 10px 30px rgba(120, 90, 50, 0.12); /* 统一柔和阴影 */
+  --shadow-lift: 0 16px 40px rgba(120, 90, 50, 0.18); /* 悬停抬升阴影 */
+
+  /* 布局 */
+  --gutter: clamp(22px, 5vw, 72px);
+
+  /* 纹理 */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.84' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23fff' opacity='.22' filter='url(%23n)' d='M0 0h180v180H0z'/%3E%3C/svg%3E");
+
+  /* ===== 排版系统 ===== */
+  /* 字号标准（1.25倍递增） */
+  --text-xs: 10px;      /* 极小文字 */
+  --text-sm: 12px;      /* 小文字 */
+  --text-base: 15px;    /* 正文 */
+  --text-lg: 18px;      /* 大文字 */
+  --text-xl: 24px;      /* 标题3 */
+  --text-2xl: 32px;     /* 标题2 */
+  --text-3xl: 42px;     /* 标题1 */
+
+  /* 行高标准 */
+  --leading-tight: 1.4;
+  --leading-normal: 1.6;
+  --leading-relaxed: 1.8;
+  --leading-loose: 2.0;
+
+  /* 间距标准（8px基准） */
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-5: 40px;
+  --space-6: 48px;
+  --space-8: 64px;
+
+  /* ===== 动画缓动函数（必须在这里定义，供其他CSS使用） ===== */
+  --ease: cubic-bezier(.2, .75, .25, 1);
+  --ease-out: cubic-bezier(.16, .85, .45, 1);
+  --ease-spring: cubic-bezier(.34, 1.56, .64, 1);
+  --ease-bounce: cubic-bezier(.68, -0.55, .265, 1.55);
+}
+
+/* ===== 简化的背景渐变 ===== */
+html {
+  background: var(--bg);
+  scroll-behavior: smooth;
+  overflow-x: clip;
+}
+
+body {
+  isolation: isolate;
+  position: relative;
+  overflow-x: clip;
+  /* 手账米纸：暖金 + 暖粉 + 暖米三层，加细密纸纹，像摊开的旧手账 */
+  background:
+    radial-gradient(ellipse 75% 820px at 92% 460px, rgba(200, 160, 110, 0.26), transparent 82%),
+    radial-gradient(ellipse 62% 720px at 8% 280px, rgba(224, 164, 174, 0.22), transparent 78%),
+    radial-gradient(ellipse 85% 1050px at 50% 1800px, rgba(214, 174, 132, 0.20), transparent 88%),
+    var(--bg);
+  color: var(--ink);
+  margin: 0;
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+}
+
+body:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: var(--grain);
+  opacity: .25;
+}
+
+/* ===== 基础元素 ===== */
+a {
+  color: inherit;
+}
+
+button, input, textarea, select {
+  font: inherit;
+}
+
+button {
+  color: inherit;
+}
+
+button, a, input, textarea, select {
+  touch-action: manipulation;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--copper);
+  outline-offset: 5px;
+}
+
+button {
+  border-color: var(--line);
+}
+
+.primary, .button-primary {
+  background: var(--copper-deep);
+  color: #fffaf2;
+  border: 1px solid var(--copper-deep);
+}
+
+.primary:hover, .button-primary:hover {
+  background: #7a522a;
+  border-color: #7a522a;
+}
+
+.eyebrow, .muted, .small, .quote-by, figcaption {
+  color: var(--muted);
+}
+
+/* ===== 特殊组件 ===== */
+.drawn-frame {
+  position: relative;
+  border: 1px solid #a8866b;
+  padding: 12px;
+  background: #fffdf7e6;
+  border-radius: 2px 5px 3px 6px;
+  box-shadow: 0 14px 38px rgba(80, 60, 40, 0.12), inset 0 0 0 4px #f6f1e7, inset 0 0 0 5px var(--deep);
+}
+
+.drawn-frame:before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border: 1px solid #c49a7777;
+  transform: rotate(.35deg);
+  pointer-events: none;
+  border-radius: 3px 1px 4px 2px;
+}
+
+.drawn-frame img {
+  display: block;
+  width: 100%;
+  object-fit: cover;
+}
+
+.drawn-frame figcaption {
+  font-size: var(--text-xs);
+  padding: 12px 3px 1px;
+  letter-spacing: .04em;
+}
+
+/* ===== 日期标签 ===== */
+.date-tag {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 68px;
+  min-height: 88px;
+  padding: var(--space-1) 10px var(--space-2);
+  color: #3c3029;
+  background: linear-gradient(174deg, transparent 48%, #8c786533 49%, #fff5dd44 50%, transparent 52%), var(--grain), #d4c7b0;
+  clip-path: polygon(0 0, 100% 1%, 99% 92%, 92% 96%, 84% 93%, 76% 98%, 66% 94%, 57% 99%, 47% 95%, 38% 99%, 26% 94%, 17% 98%, 8% 93%, 0 96%);
+  transform: rotate(-5deg);
+  box-shadow: inset 0 0 12px #55402c30;
+}
+
+.date-tag small {
+  font-size: var(--text-xs);
+  letter-spacing: .18em;
+  opacity: .85;
+}
+
+.date-tag b {
+  font: 34px/1.2 Georgia, serif;
+  font-weight: 400;
+}
+
+/* 双人记号：四月表白（粉） / 九月开始（蓝） */
+.date-tag {
+  border-top: 3px solid var(--hers);
+}
+
+.date-tag.warm-tag {
+  border-top: 3px solid var(--his);
+  transform: rotate(4deg);
+}
+
+.date-pair {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.date-pair .date-tag + .date-tag {
+  transform: rotate(5deg);
+  margin-top: var(--space-1);
+}
+
+.warm-tag {
+  background-color: #ddc39f;
+  margin-bottom: var(--space-4);
+}
+
+/* ===== 阅读器 ===== */
+.reader {
+  color: #3a2e25;
+  background:
+    linear-gradient(90deg, transparent 49.6%, #7c65451a 49.9%, #fff8df88 50.1%, transparent 50.6%),
+    linear-gradient(0deg, transparent 65%, #7c65451c 65.2%, #fff7dc99 65.4%, transparent 65.9%),
+    var(--grain),
+    var(--paper);
+  border: 1px solid #c4a882;
+  box-shadow: 2px 3px #d4c0a0, 4px 6px #a8916f, 0 24px 65px #0006;
+}
+
+.reader .eyebrow,
+.reader .reader-date,
+.reader .small {
+  color: #826e5b;
+}
+
+.reader button {
+  color: #5c443a;
+  border-color: #9c7e6555;
+}
+
+/* ===== 对话框 ===== */
+dialog, .story-dialog {
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  box-shadow: 0 24px 100px #0009;
+  border-radius: 8px;
+}
+
+dialog::backdrop {
+  background: rgba(50, 40, 30, 0.5);
+  backdrop-filter: blur(8px);
+}
+
+/* ===== 表单元素 ===== */
+input, textarea, select {
+  background: #fffdf7;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: var(--space-2);
+  max-width: 100%;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--copper);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(226, 176, 119, 0.2);
+}
+
+/* ===== 无障碍 ===== */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *, *:before, *:after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* =====================================================
+   手账剪贴簿元素系统：胶带 / 贴纸 / 虚线缝线 / 手绘边框
+   ===================================================== */
+
+/* 和纸胶带：斜贴的小色条，半透明 + 撕边质感 */
+.tape {
+  position: absolute;
+  z-index: 2;
+  width: 110px;
+  height: 28px;
+  opacity: .82;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(90deg, rgba(255,255,255,.12) 0 2px, transparent 2px 6px),
+    var(--tape-c, var(--tape-pink));
+  box-shadow: 0 1px 4px rgba(80,60,40,.14);
+  /* 撕边：两端锯齿 */
+  clip-path: polygon(0 4%, 100% 0, 99% 96%, 1% 100%);
+}
+.tape.mint  { --tape-c: var(--tape-mint); }
+.tape.pink  { --tape-c: var(--tape-pink); }
+.tape.yellow{ --tape-c: var(--tape-yellow); }
+.tape.blue  { --tape-c: var(--tape-blue); }
+
+/* 贴纸圆点：手账常见的彩色小圆贴，可作角标 */
+.dot-sticker {
+  position: absolute;
+  z-index: 3;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--sticker-c, var(--sticker-red));
+  box-shadow: inset 0 -3px 6px rgba(0,0,0,.18), 0 1px 3px rgba(0,0,0,.12);
+  pointer-events: none;
+}
+.dot-sticker.coral { --sticker-c: var(--sticker-coral); }
+.dot-sticker.gold  { --sticker-c: var(--gold); }
+.dot-sticker.blue  { --sticker-c: var(--his); }
+.dot-sticker.pink  { --sticker-c: var(--hers); }
+
+/* 虚线缝线：像手账里用针线缝的装饰边框 */
+.stitch {
+  border: 1.5px dashed var(--doodle-soft);
+}
+.stitch-underline {
+  position: relative;
+}
+.stitch-underline:after {
+  content: "";
+  display: block;
+  margin-top: 10px;
+  height: 0;
+  border-top: 2px dashed var(--doodle-soft);
+  opacity: .7;
+}
+
+/* 手绘边框：不规则的圆角矩形，像用笔随手描的框 */
+.sketch-frame {
+  position: relative;
+  border: 1.8px solid var(--doodle);
+  border-radius: 255px 18px 225px 18px / 18px 225px 18px 255px;
+  box-shadow: 3px 4px 0 rgba(120,95,60,.08);
+}
+.sketch-frame.small {
+  border-radius: 125px 10px 120px 10px / 10px 120px 10px 125px;
+}
+
+/* 便签纸：随手贴的方形小纸片，一角微微翘起 */
+.sticky-note {
+  position: relative;
+  display: inline-block;
+  padding: 14px 16px;
+  background: var(--tape-yellow);
+  color: #4a3c28;
+  font-size: var(--text-sm);
+  line-height: 1.7;
+  box-shadow: 2px 4px 8px rgba(80,60,40,.16);
+  transform: rotate(-2deg);
+}
+.sticky-note.pink { background: var(--tape-pink); color: #5c3040; }
+.sticky-note.mint { background: var(--tape-mint); color: #2f4634; }
+.sticky-note.blue { background: var(--tape-blue); color: #2c4058; }
+.sticky-note:after {
+  content: "";
+  position: absolute;
+  right: -4px;
+  bottom: -4px;
+  width: 14px;
+  height: 14px;
+  background: inherit;
+  filter: brightness(.9);
+  clip-path: polygon(100% 0, 0 100%, 100% 100%);
+}
+
+/* 涂鸦划线：手写高亮 / 圈注 */
+.doodle-underline {
+  background: linear-gradient(180deg, transparent 60%, var(--tape-yellow) 60%, var(--tape-yellow) 92%, transparent 92%);
+  padding: 0 3px;
+}
+.doodle-circle {
+  position: relative;
+}
+.doodle-circle:after {
+  content: "";
+  position: absolute;
+  left: -6px;
+  right: -6px;
+  top: -4px;
+  bottom: -2px;
+  border: 2px solid var(--sticker-red);
+  border-radius: 50%;
+  opacity: .55;
+  transform: rotate(-6deg);
+  pointer-events: none;
+}
+
+/* 纸张斑驳旧化：给卡片加一点手账的旧纸张质感 */
+.paper-worn {
+  position: relative;
+}
+.paper-worn:before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(180,140,90,.06), transparent 30%),
+    radial-gradient(circle at 85% 80%, rgba(120,90,50,.05), transparent 32%),
+    radial-gradient(circle at 60% 40%, rgba(160,120,70,.04), transparent 26%);
+  border-radius: inherit;
+}
+
