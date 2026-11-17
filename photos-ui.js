@@ -2,8 +2,59 @@
    只接管 photos 路由与 #lightbox，其他房间仍由 app.js 渲染。 */
 (() => {
   const pad = n => String(n).padStart(3, '0');
+  const wallSrc = i => 'assets/wall/' + i + '.jpg';
+  const viewSrc = i => 'assets/view/' + i + '.jpg';
+  function markMissing(img) {
+    if (!img || img.dataset.missing === '1') return;
+    img.dataset.missing = '1';
+    img.classList.add('is-missing');
+    img.removeAttribute('src');
+    const host = img.parentElement;
+    if (host && !host.querySelector('.photo-missing-label')) {
+      const label = document.createElement('span');
+      label.className = 'photo-missing-label';
+      label.textContent = '这张暂时看不了';
+      host.appendChild(label);
+    }
+  }
+  function clearMissing(img) {
+    if (!img) return;
+    delete img.dataset.missing;
+    img.classList.remove('is-missing');
+    img.parentElement?.querySelector('.photo-missing-label')?.remove();
+  }
   let index = 0;
   let trigger = null;
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  let closeTimer = null;
+  let activeViewer = null;
+
+  function clearMotion(d) {
+    clearTimeout(closeTimer);
+    closeTimer = null;
+    d.classList.remove('viewer-opening', 'viewer-closing');
+  }
+
+  function finishClose(d, value) {
+    clearMotion(d);
+    if (d.open) HTMLDialogElement.prototype.close.call(d, value);
+  }
+
+  function closeViewer(d, value) {
+    if (!d.open || d.classList.contains('viewer-closing')) return;
+    clearMotion(d);
+    if (reducedMotion.matches) { finishClose(d, value); return; }
+    d.classList.add('viewer-closing');
+    // The modal and focus trap remain until the short exit completes.
+    closeTimer = setTimeout(() => finishClose(d, value), 180);
+  }
+
+  reducedMotion.addEventListener('change', () => {
+    const d = activeViewer;
+    if (!d || !d.open || !reducedMotion.matches) return;
+    if (d.classList.contains('viewer-closing')) finishClose(d);
+    else clearMotion(d);
+  });
 
   function viewer() {
     const d = document.getElementById('lightbox');
@@ -19,13 +70,25 @@
       '</div>' +
       '<p class="hint">← → 翻看 · Esc 收好</p>';
     d.dataset.built = '1';
+    activeViewer = d;
+    // Own the viewer lifecycle here, including older shared click handlers.
+    d.close = value => closeViewer(d, value);
+    d.oncancel = e => { e.preventDefault(); d.close(); };
+    d.addEventListener('animationend', e => {
+      if (e.target === d && e.animationName === 'photo-viewer-in') {
+        d.classList.remove('viewer-opening');
+      }
+    });
 
     d.querySelectorAll('[data-step]').forEach(b => {
       b.onclick = () => show(index + Number(b.dataset.step));
     });
     d.querySelector('#close-photo').onclick = () => d.close();
     d.onclick = e => { if (e.target === d) d.close(); };
-    d.onclose = () => { try { trigger && trigger.focus({ preventScroll: true }); } catch (e) {} };
+    d.onclose = () => {
+      clearMotion(d);
+      try { if (trigger && trigger.isConnected) trigger.focus({ preventScroll: true }); } catch (e) {}
+    };
     return d;
   }
 
@@ -46,21 +109,39 @@
     if (from) trigger = from;
     const d = viewer();
     const img = d.querySelector('#photo-full');
-    img.src = 'assets/' + index + '.jpg';
+    clearMissing(img);
+    img.onload = () => { if (img.dataset.missing === '1') return; fit(d, img); };
+    img.onerror = () => markMissing(img);
+    img.src = viewSrc(index);
     img.alt = captions[index];
     if (img.complete && img.naturalWidth) fit(d, img);
-    else img.onload = () => fit(d, img);
     d.querySelector('#photo-caption').textContent = captions[index];
     d.querySelector('#photo-index').textContent = pad(index + 1) + ' / ' + total;
     d.querySelectorAll('[data-step]').forEach(b => { b.disabled = false; });
-    if (!d.open) d.showModal();
+    if (d.classList.contains('viewer-closing')) clearMotion(d);
+    if (!d.open) {
+      clearMotion(d);
+      // Skip the old shared showModal opacity wrapper: one animation owner.
+      HTMLDialogElement.prototype.showModal.call(d);
+      if (!reducedMotion.matches) d.classList.add('viewer-opening');
+    }
+  }
+
+  function zhCount(n) {
+    const d = '零一二三四五六七八九';
+    const num = Number(n);
+    if (!Number.isFinite(num) || num <= 0 || num > 99) return String(n);
+    if (num < 10) return d[num];
+    const tens = Math.floor(num / 10);
+    const ones = num % 10;
+    return (tens === 1 ? '' : d[tens]) + '十' + (ones ? d[ones] : '');
   }
 
   function room() {
     const items = captions.map((c, i) =>
       '<figure class="photo">' +
         '<button type="button" data-photo="' + i + '" aria-label="放大照片：' + esc(c) + '">' +
-          '<img src="assets/' + i + '.jpg" alt="' + esc(c) + '" loading="lazy" decoding="async">' +
+          '<img src="' + wallSrc(i) + '" alt="' + esc(c) + '" loading="lazy" decoding="async">' +
         '</button>' +
         '<figcaption><span>' + esc(c) + '</span><b>' + pad(i + 1) + '</b></figcaption>' +
       '</figure>').join('');
@@ -70,8 +151,7 @@
         '<span class="eyebrow"><span class="xuan">盛梓轩</span> &amp; <span class="ran">方然</span> · 照片</span>' +
         '<h1>有些瞬间，<br>值得再看一次。</h1>' +
         '<div class="head-row">' +
-          '<p>三十四张，都还留着。点开看完整画面，左右可以翻。</p>' +
-          '<span class="photos-count">共 ' + captions.length + ' 张</span>' +
+          '<p>' + zhCount(captions.length) + '张，都还留着。点开看完整画面，左右可以翻。</p>' +
         '</div>' +
       '</header>' +
       '<div class="gallery gallery--wall">' + items +
@@ -83,6 +163,9 @@
 
     app.querySelectorAll('[data-photo]').forEach(b => {
       b.onclick = () => show(Number(b.dataset.photo), b);
+    });
+    app.querySelectorAll('.gallery--wall img').forEach(img => {
+      img.addEventListener('error', () => markMissing(img));
     });
   }
 

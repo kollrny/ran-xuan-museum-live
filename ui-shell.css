@@ -489,6 +489,10 @@ main {
   color: var(--muted);
 }
 
+/* 访客隐藏「管理收藏」；登录后 cloud.js 会写 body[data-editor="1"] 再显示 */
+.museum-footer [data-route="manage"] { display: none; }
+body[data-editor="1"] .museum-footer [data-route="manage"] { display: inline-block; }
+
 /* ===== 页面标题 ===== */
 .page-head {
   margin: var(--space-4) 0 var(--space-6);
@@ -613,11 +617,14 @@ body[data-room=letters],body[data-room=read]{background:radial-gradient(ellipse 
 
 .photo figcaption{color:var(--muted);display:flex;justify-content:space-between;font-size:var(--text-xs);padding-top:var(--space-2);opacity:.8}.upload-box{background:var(--surface);border:1px dashed var(--line);padding:var(--space-5);border-radius:6px}
 
-.vestibule{background:radial-gradient(ellipse at 30% 0,rgba(139,111,79,0.3),transparent 70%);color:var(--ink);display:grid;place-items:center;min-height:500px;padding:var(--space-6)}
-
-.vestibule .doors{border:1px solid var(--line);padding:var(--space-6);background:transparent}
-
+.vestibule{background:var(--paper);color:var(--ink);display:grid;place-items:center;min-height:500px;padding:var(--space-6);position:relative;text-align:center}
+.vestibule:before{display:none}
+.vestibule .eyebrow{color:var(--muted)}
+.vestibule .doors{border:1px solid var(--line);padding:var(--space-6);max-width:680px;background:var(--surface)}
 .vestibule p{color:var(--muted);line-height:var(--leading-relaxed)}
+.vestibule button{border-color:var(--line);color:var(--ink);background:transparent}
+.vestibule.is-lit{background:radial-gradient(ellipse at 50% 8%,rgba(176,128,74,.26),transparent 58%),var(--paper);transition:background .55s ease}
+@media(prefers-reduced-motion:reduce){.vestibule.is-lit{transition:none}}
 
 @media(max-width:768px){
   .letters{gap:var(--space-3)}

@@ -36,11 +36,8 @@ body[data-room=photos] .nav button[aria-current=page] {
 }
 
 .photos-head .head-row {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 24px;
-  flex-wrap: wrap;
+  display: block;
+  max-width: 38em;
 }
 
 .photos-head p {
@@ -73,6 +70,7 @@ body[data-room=photos] .nav button[aria-current=page] {
 
 /* ---------- 墙面上的相纸 ---------- */
 .gallery--wall {
+  display: block;
   columns: 3;
   column-gap: 30px;
   padding: 0 0 70px;
@@ -106,6 +104,7 @@ body[data-room=photos] .nav button[aria-current=page] {
 }
 
 .gallery--wall .photo button {
+  position: relative;
   display: block;
   width: 100%;
   padding: 0;
@@ -122,6 +121,31 @@ body[data-room=photos] .nav button[aria-current=page] {
   height: auto;
   background: #e6d5b7;
   transition: transform .6s ease;
+}
+
+.gallery--wall .photo img.is-missing {
+  min-height: 200px;
+  object-fit: none;
+  visibility: hidden;
+}
+
+.gallery--wall .photo-missing-label,
+.photo-viewer .photo-missing-label {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  font-size: 13px;
+  letter-spacing: .08em;
+  color: var(--copper-deep, #73513a);
+  pointer-events: none;
+}
+
+.photo-viewer #photo-full.is-missing {
+  min-width: 200px;
+  min-height: 240px;
+  visibility: hidden;
 }
 
 .gallery--wall .photo button:hover img {
@@ -207,6 +231,7 @@ body[data-room=photos] .nav button[aria-current=page] {
 
 /* 相框直接长在图片上，尺寸由脚本按视口算好，避免空白相纸。 */
 .viewer-frame {
+  position: relative;
   display: flex;
   justify-content: center;
 }
@@ -300,9 +325,8 @@ body[data-room=photos] .nav button[aria-current=page] {
 @media (max-width: 650px) {
   .photos-head { padding: 14px 0 26px; }
   .photos-head h1 { font-size: clamp(30px, 8.6vw, 40px); }
-  .photos-head .head-row { align-items: flex-start; }
-  .photos-count { padding: 0; border: 0; letter-spacing: .12em; }
-  .gallery--wall { columns: 2; column-gap: 15px; padding-bottom: 52px; }
+  .photos-head .head-row { max-width: none; }
+  .gallery--wall { display: block; columns: 2; column-gap: 15px; padding-bottom: 52px; }
   .gallery--wall .photo {
     margin-bottom: 16px;
     padding: 8px 8px 0;
@@ -334,4 +358,41 @@ body[data-room=photos] .nav button[aria-current=page] {
 @media (prefers-reduced-motion: reduce) {
   .gallery--wall .photo { transform: none; transition: none; }
   .gallery--wall .photo img { transition: none; }
+}
+
+/* 看图器动效专项：只用透明度和极小位移，不改字体、遮罩颜色或柜体。 */
+#lightbox.photo-viewer.viewer-opening {
+  animation: photo-viewer-in 220ms cubic-bezier(.2,.7,.3,1) both;
+}
+#lightbox.photo-viewer.viewer-opening::backdrop {
+  animation: photo-veil-in 220ms ease-out both;
+}
+#lightbox.photo-viewer.viewer-closing {
+  animation: photo-viewer-out 160ms ease-in both;
+}
+#lightbox.photo-viewer.viewer-closing::backdrop {
+  animation: photo-veil-out 160ms ease-in both;
+}
+@keyframes photo-viewer-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes photo-viewer-out {
+  from { opacity: 1; transform: none; }
+  to { opacity: 0; transform: translateY(4px); }
+}
+@keyframes photo-veil-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes photo-veil-out { from { opacity: 1; } to { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  #lightbox.photo-viewer,
+  #lightbox.photo-viewer::backdrop,
+  #lightbox.photo-viewer *,
+  #lightbox.photo-viewer *::before,
+  #lightbox.photo-viewer *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  #lightbox.photo-viewer { transform: none !important; opacity: 1 !important; }
+  .gallery--wall .photo:hover { transform: none !important; }
+  .gallery--wall .photo button:hover img { transform: none !important; }
 }
