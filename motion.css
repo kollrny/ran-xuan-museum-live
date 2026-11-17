@@ -21,20 +21,38 @@ button:focus-visible,a:focus-visible{
   outline-offset:4px;
 }
 
-/* 页面切换过渡：由 motion.js 增删 .page-exit / .page-enter */
+/* 页面切换过渡：由 motion.js 增删 .page-exit / .page-enter
+   米纸浅底上只做短位移，不再缩放。#app.reveal 的 arrive 动画关掉，
+   避免每次 render 都重播，并和 page-enter 叠在一起。 */
 #app{
   transition:opacity .35s var(--ease),transform .35s var(--ease);
 }
+#app.reveal{
+  animation:none;
+}
 #app.page-exit{
   opacity:0;
-  transform:translateY(-12px) scale(.99);
+  transform:translateY(-8px);
 }
 #app.page-enter{
   animation:page-enter .45s var(--ease-out) both;
 }
 
 @keyframes page-enter{
-  from{opacity:0;transform:translateY(8px) scale(.98)}
+  from{opacity:0;transform:translateY(6px)}
+  to{opacity:1;transform:none}
+}
+
+/* 「写给她」异步换上便条时，若翻页入场已结束，再轻轻落一次；写、改、删不重播 */
+#app.paper-arrive > .for-her-head,
+#app.paper-arrive > .for-her-toolbar,
+#app.paper-arrive > .for-her-empty,
+#app.paper-arrive > .for-her-list,
+#app.paper-arrive > .for-her-editor{
+  animation:paper-arrive .22s var(--ease-out) both;
+}
+@keyframes paper-arrive{
+  from{opacity:0;transform:translateY(6px)}
   to{opacity:1;transform:none}
 }
 
@@ -97,7 +115,12 @@ button:active:after{
     scroll-behavior:auto!important;
   }
   #app.page-exit,
-  #app.page-enter{
+  #app.page-enter,
+  #app.paper-arrive > .for-her-head,
+  #app.paper-arrive > .for-her-toolbar,
+  #app.paper-arrive > .for-her-empty,
+  #app.paper-arrive > .for-her-list,
+  #app.paper-arrive > .for-her-editor{
     animation:none!important;
     opacity:1;
     transform:none;

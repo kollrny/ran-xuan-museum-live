@@ -1,0 +1,164 @@
+/* 整站配色收束 2026-11-17：只改实验版，不上线。
+   暖纸底、墨色字、铜棕强调；盛梓轩蓝 / 方然粉只作小记号。
+   藏品区、十空柜柜内和看图器深色遮罩保持暗室，不在这里改亮。 */
+
+/* 各房间外壳统一米纸，去掉旧稿里按房间换粉底、绿底的残留 */
+body[data-room],
+body[data-room="home"],
+body[data-room="letters"],
+body[data-room="photos"],
+body[data-room="timeline"],
+body[data-room="wishes"],
+body[data-room="explore"],
+body[data-room="artifacts"],
+body[data-room="for-her"] {
+  background-color: var(--bg);
+}
+
+.time-intro,
+.wish-head,
+.letters-hero,
+.photos-hero {
+  background: transparent;
+  box-shadow: none;
+  border-color: transparent;
+}
+
+.time-intro h1,
+.time-intro h1 span,
+.wish-head h1,
+.letters-hero h1,
+.photos-hero h1 {
+  color: var(--ink-strong);
+}
+
+.time-intro h1 span {
+  border-bottom-color: var(--copper);
+  font-style: normal;
+}
+
+/* 标题下划线、主按钮、进度条：铜棕，不再用粉线 */
+.time-intro button,
+#start-days,
+#future-days,
+.time-ending button {
+  border-color: var(--copper);
+  color: var(--ink);
+  background: transparent;
+}
+
+.time-intro button:hover,
+#start-days:hover,
+#future-days:hover {
+  background: rgba(176, 128, 74, 0.12);
+  border-color: var(--copper-deep);
+  color: var(--ink-strong);
+}
+
+.reading-progress {
+  background: var(--copper);
+}
+
+.time-controls,
+.filters,
+.months {
+  background: transparent;
+  border-color: var(--line);
+}
+
+.filters button,
+.months button,
+.search-row input,
+#only-saved,
+#clear-search {
+  color: var(--ink);
+  border-color: var(--line);
+  background: transparent;
+}
+
+.filters button[aria-pressed="true"],
+.months button[aria-pressed="true"],
+#only-saved[aria-pressed="true"] {
+  background: rgba(176, 128, 74, 0.16);
+  color: var(--ink-strong);
+  border-color: var(--copper);
+}
+
+/* 「我们的日子」旧粉框、粉轴改成米线与铜点 */
+.day-results:before {
+  background: var(--line);
+}
+
+.day-date:after {
+  background: var(--copper);
+  box-shadow: 0 0 0 5px var(--bg);
+}
+
+.day-date b {
+  color: var(--ink-strong);
+  background: var(--paper);
+  border-color: var(--line);
+}
+
+.scene-content,
+.scene-content.paper {
+  background: var(--paper);
+  color: var(--ink);
+  border-color: var(--line);
+  box-shadow: none;
+}
+
+.scene-content h2,
+.scene-content > p {
+  color: var(--ink);
+}
+
+.scene-content > p {
+  color: var(--muted);
+}
+
+.scene-actions button {
+  border-color: var(--line);
+  color: var(--ink);
+}
+
+.month-chapter,
+.chapter-seal {
+  background: transparent;
+  border-color: var(--line);
+  color: var(--ink);
+}
+
+.chapter-month {
+  color: var(--copper-deep);
+}
+
+.week-tabs button[aria-pressed="true"],
+.month-tabs button[aria-selected="true"] {
+  background: rgba(176, 128, 74, 0.16);
+  color: var(--ink);
+  border-color: var(--copper);
+}
+
+.empty-days {
+  background: var(--paper);
+  border-color: var(--line);
+}
+
+/* 表单底也用暖纸，避免输入框一块冷白 */
+.wish-form input,
+.cloud-form input,
+.cloud-form textarea,
+.search-row input {
+  background: var(--paper);
+  color: var(--ink);
+  border-color: var(--line);
+}
+
+/* 柜内暗室与看图器保持已有深色，不在这里改亮 */
+.collection-room,
+.collection-aperture,
+.cabinet-interior {
+  background-color: revert-layer;
+}
+

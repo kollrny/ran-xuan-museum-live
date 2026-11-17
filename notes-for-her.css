@@ -1,0 +1,244 @@
+/* 「写给她」——和信件室同一张暖纸。原话等用户发来，不预写留言。 */
+
+body[data-room="for-her"] {
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.for-her-head {
+  display: block;
+  max-width: none;
+  margin: 0;
+  padding: 20px 0 28px;
+}
+
+.for-her-head .eyebrow {
+  color: var(--muted);
+  letter-spacing: 0.12em;
+}
+
+.for-her-head h1 {
+  font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", "Noto Sans SC", sans-serif;
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 600;
+  line-height: 1.42;
+  margin: 14px 0 16px;
+  color: var(--ink-strong);
+  letter-spacing: 0.02em;
+}
+
+/* 短铜线，不用粉线 */
+.for-her-head h1:after {
+  content: "";
+  display: block;
+  width: 4.5em;
+  height: 2px;
+  margin: 14px 0 0;
+  background: var(--copper);
+}
+
+.for-her-head p {
+  color: var(--muted);
+  line-height: 1.9;
+  max-width: 36em;
+  margin: 0;
+  font-size: 15px;
+}
+
+.for-her-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 12px 20px;
+  margin: 0 0 28px;
+}
+
+.for-her-status {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* 空白便条：一张空着的暖纸，不是冷白卡片 */
+.for-her-empty {
+  margin: 8px 0 28px;
+  padding: 28px 28px 32px;
+  background: linear-gradient(178deg, var(--surface), var(--paper) 72%, #f0e7d8);
+  border: 1px solid color-mix(in srgb, var(--copper-deep) 32%, transparent);
+  border-radius: 1px;
+  color: var(--ink);
+  box-shadow: 0 6px 18px rgba(120, 90, 50, 0.06);
+}
+
+.for-her-empty .eyebrow {
+  color: var(--copper-deep);
+  letter-spacing: 0.12em;
+}
+
+.for-her-empty h2 {
+  font-family: "Songti SC", "STSong", "SimSun", "Noto Serif CJK SC", "Noto Serif SC", serif;
+  font-size: clamp(22px, 3vw, 28px);
+  font-weight: 400;
+  color: var(--ink-strong);
+  margin: 10px 0 12px;
+  line-height: 1.5;
+}
+
+.for-her-empty p {
+  color: var(--muted);
+  max-width: 36em;
+  line-height: 1.9;
+  margin: 0;
+}
+
+.for-her-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 20px;
+}
+
+.for-her-card,
+.for-her-note {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(178deg, var(--surface), var(--paper) 70%, #f0e7d8);
+  border: 1px solid color-mix(in srgb, var(--copper-deep) 42%, transparent);
+  border-radius: 1px;
+  color: var(--ink);
+  padding: 22px 24px 24px;
+  box-shadow: 0 8px 24px rgba(120, 90, 50, 0.08);
+  min-height: 160px;
+}
+
+.for-her-card:after,
+.for-her-note:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(25deg, transparent 49.5%, #c6ab871c 50%, transparent 50.5%);
+}
+
+.for-her-card > *,
+.for-her-note > * {
+  position: relative;
+  z-index: 1;
+}
+
+.for-her-name {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink-strong);
+  margin: 0 0 8px;
+}
+
+.for-her-date,
+.for-her-note .from {
+  margin: 0 0 14px;
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+}
+
+.for-her-body {
+  margin: 0;
+  font-family: "Songti SC", "STSong", "SimSun", "Noto Serif CJK SC", "Noto Serif SC", serif;
+  font-size: 17px;
+  line-height: 1.95;
+  color: var(--ink);
+  white-space: pre-wrap;
+}
+
+.for-her-card-actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.for-her-card-actions button,
+.for-her-toolbar .text-btn,
+.for-her-editor-actions button[type="button"] {
+  border: 0;
+  background: none;
+  padding: 0;
+  color: var(--copper-deep);
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.for-her-toolbar .primary {
+  background: var(--deep);
+  border: 1px solid var(--copper);
+  color: #fffaf2;
+  padding: 8px 16px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.for-her-editor {
+  margin: 0 0 28px;
+  padding: 24px 24px 28px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 1px;
+}
+
+.for-her-editor h2 {
+  margin: 0 0 16px;
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--ink-strong);
+}
+
+.for-her-editor label {
+  display: block;
+  margin: 0 0 14px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.for-her-editor input,
+.for-her-editor textarea {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 1px;
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+}
+
+.for-her-editor textarea {
+  min-height: 8em;
+  line-height: 1.7;
+  resize: vertical;
+}
+
+.for-her-editor-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+@media (max-width: 700px) {
+  .for-her-list {
+    grid-template-columns: 1fr;
+  }
+  .for-her-head {
+    padding: 14px 0 24px;
+  }
+  .for-her-head h1 {
+    font-size: clamp(30px, 8.6vw, 40px);
+  }
+  .for-her-empty {
+    padding: 22px 20px 24px;
+  }
+  .for-her-card,
+  .for-her-note {
+    padding: 20px 18px 22px;
+  }
+}

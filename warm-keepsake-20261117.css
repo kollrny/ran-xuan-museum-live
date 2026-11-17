@@ -1,0 +1,243 @@
+/* 温馨手账元素 2026-11-17：只改实验版，不上线。
+   在打底上收疏密：内页标题仍落在米纸上，不另套一块纸板；
+   每个房间标题一截和纸胶带、一处线描；空白便条和少量卡片再点一下。
+   不要贴满，不要改回粉线或蜂蜜高亮下划线。
+   柜内暗室和看图器不在这里改亮。 */
+
+/* ---------- 共用：斜贴的一小截和纸胶带 ---------- */
+.letter-room-head,
+.for-her-head,
+.photos-head,
+.time-intro,
+.wish-head,
+.wish-book-heading,
+.for-her-empty,
+.letter-empty {
+  position: relative;
+  overflow: visible;
+}
+
+.letter-room-head:before,
+.for-her-head:before,
+.photos-head:before,
+.time-intro:before,
+.wish-book-heading:before,
+.for-her-empty:before,
+.letter-empty:before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: 12px;
+  width: 86px;
+  height: 20px;
+  z-index: 2;
+  pointer-events: none;
+  opacity: .82;
+  background:
+    repeating-linear-gradient(90deg, rgba(255,255,255,.22) 0 1px, transparent 1px 3px, rgba(255,255,255,.08) 3px 5px, transparent 5px 8px),
+    var(--grain),
+    var(--tape-c, var(--tape-yellow));
+  box-shadow: 0 1px 3px rgba(80, 60, 40, .12), inset 0 1px 0 rgba(255,255,255,.28);
+  clip-path: polygon(0 16%, 4% 6%, 11% 14%, 18% 3%, 29% 12%, 41% 2%, 54% 11%, 66% 3%, 78% 13%, 88% 4%, 96% 14%, 100% 8%, 100% 88%, 96% 97%, 86% 89%, 74% 98%, 62% 90%, 49% 99%, 36% 88%, 24% 97%, 13% 89%, 4% 98%, 0 86%);
+  transform: rotate(-5deg);
+}
+
+/* 蓝、粉只作小记号：写给她一截短粉胶带，愿望册一截浅蓝 */
+.for-her-head:before {
+  --tape-c: var(--tape-pink);
+  width: 64px;
+  left: auto;
+  right: 28px;
+  transform: rotate(6deg);
+}
+
+.photos-head:before { --tape-c: var(--tape-mint); }
+
+.wish-book-heading:before {
+  --tape-c: var(--tape-blue);
+  width: 64px;
+}
+
+.for-her-empty:before,
+.letter-empty:before {
+  --tape-c: var(--tape-yellow);
+  width: 72px;
+  height: 16px;
+  top: -7px;
+}
+
+/* ---------- 房间标题角落：一处已有线描，不挡字 ---------- */
+.letter-room-head:after,
+.for-her-head:after,
+.photos-head:after,
+.time-intro:after {
+  content: "";
+  position: absolute;
+  right: 4px;
+  top: 8px;
+  width: 56px;
+  height: 56px;
+  pointer-events: none;
+  opacity: .62;
+  background: url("assets/flower-line.svg") no-repeat center / contain;
+  filter: contrast(.92) saturate(.85);
+  transform: rotate(8deg);
+}
+
+/* 这颗心是实心蓝，贴在标题段落上会挡字，这一栏只留短粉胶带和铜线 */
+.for-her-head:after {
+  content: none;
+}
+
+.time-intro:after {
+  background-image: url("assets/star-doodle.svg");
+  top: 12px;
+  right: 8px;
+}
+
+.photos-head:after {
+  background-image: url("assets/star-doodle.svg");
+  width: 48px;
+  height: 48px;
+}
+
+/* 愿望册封面已有丝带，不再叠线描 */
+.wish-book-heading:after,
+.wish-head:after {
+  content: none;
+}
+
+/* 铜棕下划线保持，不改成粉线或蜂蜜高亮 */
+.time-intro h1 span {
+  border-bottom: 2px solid var(--copper);
+  box-shadow: none;
+}
+
+/* ---------- 信件第一封、留言第一张：卡内一截胶带，不贴满 ---------- */
+.letter-shelves .mail-card:first-child:before,
+.for-her-list .for-her-card:first-child:before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: 16px;
+  width: 58px;
+  height: 14px;
+  z-index: 2;
+  pointer-events: none;
+  opacity: .78;
+  background:
+    repeating-linear-gradient(90deg, rgba(255,255,255,.22) 0 1px, transparent 1px 3px, rgba(255,255,255,.08) 3px 5px, transparent 5px 8px),
+    var(--grain),
+    var(--tape-yellow);
+  box-shadow: 0 1px 3px rgba(80, 60, 40, .12), inset 0 1px 0 rgba(255,255,255,.28);
+  clip-path: polygon(0 16%, 4% 6%, 11% 14%, 18% 3%, 29% 12%, 41% 2%, 54% 11%, 66% 3%, 78% 13%, 88% 4%, 96% 14%, 100% 8%, 100% 88%, 96% 97%, 86% 89%, 74% 98%, 62% 90%, 49% 99%, 36% 88%, 24% 97%, 13% 89%, 4% 98%, 0 86%);
+  transform: rotate(-6deg);
+}
+
+/* ---------- 照片墙：每隔几张点一截，不改相纸尺寸 ---------- */
+.gallery--wall .photo {
+  overflow: visible;
+}
+
+.gallery--wall .photo:nth-child(5n+1):before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  width: 48px;
+  height: 13px;
+  margin-left: -24px;
+  z-index: 2;
+  pointer-events: none;
+  opacity: .78;
+  background:
+    repeating-linear-gradient(90deg, rgba(255,255,255,.22) 0 1px, transparent 1px 3px, rgba(255,255,255,.08) 3px 5px, transparent 5px 8px),
+    var(--grain),
+    var(--tape-yellow);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.28);
+  clip-path: polygon(0 16%, 4% 6%, 11% 14%, 18% 3%, 29% 12%, 41% 2%, 54% 11%, 66% 3%, 78% 13%, 88% 4%, 96% 14%, 100% 8%, 100% 88%, 96% 97%, 86% 89%, 74% 98%, 62% 90%, 49% 99%, 36% 88%, 24% 97%, 13% 89%, 4% 98%, 0 86%);
+  transform: rotate(-3deg);
+}
+
+.gallery--wall .photo:nth-child(5n+1):nth-child(2n):before {
+  background-image:
+    repeating-linear-gradient(90deg, rgba(255,255,255,.16) 0 2px, transparent 2px 6px),
+    var(--tape-mint);
+  transform: rotate(4deg);
+}
+
+/* ---------- 页头页脚一条细缝线，不抢 ---------- */
+.site-header {
+  border-bottom: 1.5px dashed var(--line-strong);
+}
+
+.museum-footer {
+  border-top: 1.5px dashed var(--line-strong);
+}
+
+/* ---------- 柜内暗室、看图器：不把胶带和线描带进去 ---------- */
+.collection-room .mail-card:before,
+.collection-room .photo:before,
+.cabinet-interior :before,
+.cabinet-interior :after,
+.collection-aperture :before,
+dialog.lightbox :before,
+dialog.lightbox :after,
+#lightbox :before,
+#lightbox :after,
+.photo-viewer :before,
+.photo-viewer :after {
+  content: none;
+}
+
+@media (max-width: 768px) {
+  .letter-room-head:before,
+  .for-her-head:before,
+  .photos-head:before,
+  .time-intro:before,
+  .wish-book-heading:before {
+    width: 70px;
+    height: 16px;
+  }
+
+  .letter-room-head:after,
+  .for-her-head:after,
+  .photos-head:after,
+  .time-intro:after {
+    width: 42px;
+    height: 42px;
+    opacity: .55;
+  }
+}
+
+
+/* ---------- 质感：把已有纸面和胶带摸起来更像纸，不加新装饰 ---------- */
+.for-her-empty,
+.letter-empty,
+.mail-card,
+.for-her-card {
+  background-image:
+    var(--grain),
+    linear-gradient(178deg, var(--surface), var(--paper) 70%, #f0e7d8);
+}
+
+.gallery--wall .photo {
+  background-image:
+    var(--grain),
+    linear-gradient(178deg, #f0e7d8, #e6d5b7 68%, #dcc6a3);
+}
+
+/* 正文纸纹再显一点，仍是底 */
+body:after {
+  opacity: .32;
+}
+
+.collection-room .mail-card,
+.collection-room .photo,
+.cabinet-interior,
+.collection-aperture,
+#lightbox,
+.photo-viewer,
+dialog.lightbox {
+  background-image: none;
+}
