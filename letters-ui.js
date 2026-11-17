@@ -10,35 +10,47 @@
     const raw = String((l.paragraphs && l.paragraphs[0]) || '').replace(/\s+/g, ' ').trim();
     return raw.length > 42 ? raw.slice(0, 42) + '…' : raw;
   };
+  const fromOf = l => l.from === 'hers' ? 'hers' : 'mine';
+  const writerOf = l => fromOf(l) === 'hers' ? '方然' : '盛梓轩';
+  const addresseeOf = l => fromOf(l) === 'hers' ? '盛梓轩' : '方然';
+  const byline = l => writerOf(l) + ' 写给 ' + addresseeOf(l);
 
-  let direction = 'mine';
+  const hasMine = () => letters.some(l => (l.from !== 'hers') && (l.paragraphs && l.paragraphs.length));
+  const hasHers = () => letters.some(l => l.from === 'hers' && l.paragraphs && l.paragraphs.length);
+  let direction = (!hasMine() && hasHers()) ? 'hers' : 'mine';
+
 
   function room() {
-    const mine = letters.filter(l => l.paragraphs.length);
-    const drafts = letters.filter(l => !l.paragraphs.length);
-    const cards = mine.map(l => {
+    const mine = letters.filter(l => fromOf(l) === 'mine' && l.paragraphs.length);
+    const drafts = letters.filter(l => fromOf(l) === 'mine' && !l.paragraphs.length);
+    const hersLetters = letters.filter(l => fromOf(l) === 'hers' && l.paragraphs.length);
+    const mailCard = (l, draft) => {
       const t = splitTitle(l);
+      if (draft) {
+        return '<article class="mail-card mail-draft" aria-label="' + esc(t.ordinal) + '，还在准备">' +
+          '<span class="mail-no">' + String(l.number).padStart(2, '0') + '</span>' +
+          '<small>还在准备 · ' + esc(t.ordinal) + ' · ' + esc(byline(l)) + '</small>' +
+          '<h2>' + esc(t.headline) + '</h2>' +
+          '<span class="mail-foot">等写好，再亲手交给你。</span>' +
+          '</article>';
+      }
       return '<button class="mail-card" data-open-mail="' + l.id + '" aria-haspopup="dialog">' +
         '<span class="mail-no">' + String(l.number).padStart(2, '0') + '</span>' +
-        '<small>' + esc(dateOf(l)) + ' · ' + esc(t.ordinal) + ' · 盛梓轩 写给 方然</small>' +
+        '<small>' + esc(dateOf(l)) + ' · ' + esc(t.ordinal) + ' · ' + esc(byline(l)) + '</small>' +
         '<h2>' + esc(t.headline) + '</h2>' +
-        '<span class="mail-foot">方然 亲启 · 拆开看看 ↗</span>' +
+        '<span class="mail-foot">' + esc(addresseeOf(l)) + ' 亲启 · 拆开看看 ↗</span>' +
         '</button>';
-    }).join('') + drafts.map(l => {
-      const t = splitTitle(l);
-      return '<article class="mail-card mail-draft" aria-label="' + esc(t.ordinal) + '，还在准备">' +
-        '<span class="mail-no">' + String(l.number).padStart(2, '0') + '</span>' +
-        '<small>还在准备 · ' + esc(t.ordinal) + ' · 盛梓轩 写给 方然</small>' +
-        '<h2>' + esc(t.headline) + '</h2>' +
-        '<span class="mail-foot">等写好，再亲手交给你。</span>' +
-        '</article>';
-    }).join('');
+    };
+    const cards = mine.map(l => mailCard(l, false)).join('') + drafts.map(l => mailCard(l, true)).join('');
+    const hersCards = hersLetters.map(l => mailCard(l, false)).join('');
 
-    const hers = '<section class="letter-empty">' +
-      '<span class="eyebrow">留一个位置</span>' +
-      '<h2>你的来信，<br>也在这里等着。</h2>' +
-      '<p>这里还没有收录已核实的信件原文。等你哪天想写点什么，这格会亮起来。</p>' +
-      '</section>';
+    const hers = hersLetters.length
+      ? '<div class="letter-shelves">' + hersCards + '</div>'
+      : '<section class="letter-empty">' +
+        '<span class="eyebrow">留一个位置</span>' +
+        '<h2>你的来信，<br>也在这里等着。</h2>' +
+        '<p>这里还没有收录已核实的信件原文。等你哪天想写点什么，这格会亮起来。</p>' +
+        '</section>';
 
     app.innerHTML =
       '<header class="letter-room-head">' +
@@ -48,7 +60,7 @@
       '</header>' +
       '<nav class="letter-directions" aria-label="来信方向">' +
         '<button type="button" data-direction="mine" aria-pressed="' + (direction === 'mine') + '">我写给你的 <b>' + mine.length + '</b></button>' +
-        '<button type="button" data-direction="hers" aria-pressed="' + (direction === 'hers') + '">你写给我的 <b>0</b></button>' +
+        '<button type="button" data-direction="hers" aria-pressed="' + (direction === 'hers') + '">你写给我的 <b>' + hersLetters.length + '</b></button>' +
       '</nav>' +
       (direction === 'mine' ? '<div class="letter-shelves">' + cards + '</div>' : hers) +
       '<dialog class="letter-opening-dialog" aria-labelledby="mail-dialog-title"></dialog>';
@@ -77,14 +89,14 @@
           '<button type="button" class="mail-dialog-close" aria-label="收好信封，关掉">收好 ×</button>' +
         '</div>' +
         '<h2 class="mail-dialog-title" id="mail-dialog-title">' + esc(t.headline) + '</h2>' +
-        '<p class="mail-dialog-meta">' + esc(dateOf(l)) + ' · 盛梓轩 写给 方然</p>' +
+        '<p class="mail-dialog-meta">' + esc(dateOf(l)) + ' · ' + esc(byline(l)) + '</p>' +
         '<section class="letter-opening">' +
           '<div class="letter-desk" data-open="false">' +
             '<div class="opening-mail">' +
               '<div class="mail-paper">' +
                 '<small>' + esc(t.ordinal) + '</small>' +
                 '<p class="mail-preview">' + esc(preview(l)) + '</p>' +
-                '<span class="mail-sign">盛梓轩</span>' +
+                '<span class="mail-sign">' + esc(writerOf(l)) + '</span>' +
               '</div>' +
               '<div class="mail-pocket"></div>' +
               '<div class="mail-flap">r &amp; x</div>' +
@@ -145,10 +157,10 @@
         '<header class="letter-head">' +
           '<span class="eyebrow">' + esc(t.ordinal) + ' · ' + esc(dateOf(l)) + '</span>' +
           '<h1>' + esc(t.headline) + '</h1>' +
-          '<p class="reader-date">盛梓轩 写给 方然' + (l.paragraphs.length > 60 ? ' · 逐行原稿' : '') + '</p>' +
+          '<p class="reader-date">' + esc(byline(l)) + (l.paragraphs.length > 60 ? ' · 逐行原稿' : '') + '</p>' +
         '</header>' +
         '<div class="letter-body">' + body + '</div>' +
-        '<div class="letter-sign">盛梓轩</div>' +
+        '<div class="letter-sign">' + esc(writerOf(l)) + '</div>' +
         '<div class="reader-mark">' +
           '<button type="button" data-go="letters">收好这封信</button>' +
           '<span class="small muted">阅读位置只保存在这台设备上。</span>' +

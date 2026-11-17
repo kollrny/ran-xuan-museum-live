@@ -4,26 +4,54 @@
 /* A local bookmark, never an automatic redirect. */
 (()=>{const key='museum:last-week:v1';const valid=s=>/^#week-(0[4-9]|1[01])-([1-4])$/.test(s||'');let saved='';try{saved=localStorage.getItem(key)||''}catch{}const resume=document.createElement('button');resume.className='resume-reading';resume.type='button';resume.hidden=true;document.querySelector('.footer-copy').append(resume);function paint(){resume.hidden=!valid(saved)||document.body.dataset.room==='timeline';if(valid(saved)){const parts=saved.split('-');resume.textContent='接着读 · '+Number(parts[1])+'月第'+parts[2]+'卷';resume.setAttribute('aria-label','继续上次阅读的'+Number(parts[1])+'月第'+parts[2]+'卷周报')}}resume.addEventListener('click',()=>{if(valid(saved)){if(location.hash===saved)window.dispatchEvent(new Event('hashchange'));else location.hash=saved}});let queued=false;function record(){if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;if(document.body.dataset.room==='timeline'&&valid(location.hash)){saved=location.hash;try{localStorage.setItem(key,saved)}catch{}}paint()})}new MutationObserver(record).observe(document.body,{attributes:true,attributeFilter:['data-room']});const appRoot=document.getElementById('app');if(appRoot)new MutationObserver(record).observe(appRoot,{childList:true,subtree:true});window.addEventListener('hashchange',record);record()})();
 
-/* Page transitions, scroll reveals, and enhanced navigation. */
+/* Page transitions, scroll reveals, and enhanced navigation.
+ * 实验版约定：翻页只由本文件负责，时长与 motion.css 对齐（出场 350ms，入场 450ms）。
+ * animation-fix.js 不再重复添加 page-enter。减少动态效果开启（含使用中途改偏好）时立刻切页、去掉过渡类。
+ */
 (()=>{
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
   let lastRoute='';
+  let exitTimer=0;
+  let enterTimer=0;
+  let pending=null;
 
-  // Page transition manager
+  function clearPageClasses(){
+    app.classList.remove('page-exit','page-enter');
+  }
+
   function pageTransition(callback){
+    clearTimeout(exitTimer);
+    clearTimeout(enterTimer);
     if(reduced.matches){
+      pending=null;
+      clearPageClasses();
       callback();
       return;
     }
 
+    clearPageClasses();
     app.classList.add('page-exit');
-    setTimeout(()=>{
-      callback();
+    pending=callback;
+    exitTimer=setTimeout(()=>{
+      const fn=pending;
+      pending=null;
+      if(fn) fn();
       app.classList.remove('page-exit');
+      if(reduced.matches) return;
       app.classList.add('page-enter');
-      setTimeout(()=>app.classList.remove('page-enter'),500);
+      enterTimer=setTimeout(()=>app.classList.remove('page-enter'),450);
     },350);
   }
+
+  reduced.addEventListener('change',()=>{
+    if(!reduced.matches) return;
+    clearTimeout(exitTimer);
+    clearTimeout(enterTimer);
+    const fn=pending;
+    pending=null;
+    clearPageClasses();
+    if(fn) fn();
+  });
 
   // Intercept navigation for smooth transitions
   const originalGo=window.go;

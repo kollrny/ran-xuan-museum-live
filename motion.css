@@ -21,7 +21,7 @@ button:focus-visible,a:focus-visible{
   outline-offset:4px;
 }
 
-/* 页面切换过渡 */
+/* 页面切换过渡：由 motion.js 增删 .page-exit / .page-enter */
 #app{
   transition:opacity .35s var(--ease),transform .35s var(--ease);
 }
@@ -67,12 +67,42 @@ input:focus-visible,textarea:focus-visible,select:focus-visible{
   50%{opacity:.5}
 }
 
-/* 无障碍支持 */
+/* 按钮波纹：由 motion.css 单独负责，animation-fix / advanced-motion 不再插入 DOM */
+button:after{
+  content:'';
+  position:absolute;
+  inset:50% 50%;
+  width:0;
+  height:0;
+  border-radius:50%;
+  background:var(--copper);
+  opacity:0;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+}
+button:active:after{
+  animation:ripple-expand .6s ease-out;
+}
+@keyframes ripple-expand{
+  0%{width:0;height:0;opacity:.5}
+  100%{width:300%;height:300%;opacity:0}
+}
+
+/* 无障碍支持：翻页与波纹在减少动态效果时立刻停 */
 @media(prefers-reduced-motion:reduce){
   *{
     animation-duration:.01ms!important;
     animation-iteration-count:1!important;
     transition-duration:.01ms!important;
     scroll-behavior:auto!important;
+  }
+  #app.page-exit,
+  #app.page-enter{
+    animation:none!important;
+    opacity:1;
+    transform:none;
+  }
+  button:active:after{
+    animation:none!important;
   }
 }
