@@ -7,21 +7,80 @@
 /* Page transitions, scroll reveals, and enhanced navigation.
  * 实验版约定：翻页只由本文件负责，时长与 motion.css 对齐（出场 350ms，入场 450ms）。
  * animation-fix.js 不再重复添加 page-enter。减少动态效果开启（含使用中途改偏好）时立刻切页、去掉过渡类。
+ * 进藏品区不加重叠的 page-enter，仍由 .collection-aperture 负责。
+ * 「写给她」异步换上便条时，若入场已结束，再轻轻落一次；写、改、删不重播。
  */
 (()=>{
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
   let lastRoute='';
   let exitTimer=0;
   let enterTimer=0;
+  let arriveTimer=0;
+  let arriveObserver=null;
+  let arrivingForHer=false;
   let pending=null;
 
   function clearPageClasses(){
-    app.classList.remove('page-exit','page-enter');
+    app.classList.remove('page-exit','page-enter','paper-arrive');
   }
 
-  function pageTransition(callback){
+  function stopForHerArrive(){
+    arrivingForHer=false;
+    clearTimeout(arriveTimer);
+    if(arriveObserver){
+      arriveObserver.disconnect();
+      arriveObserver=null;
+    }
+    app.classList.remove('paper-arrive');
+  }
+
+  function forHerSettled(){
+    return !!(app.querySelector('.for-her-empty, .for-her-list, .for-her-editor, [data-for-her-add], [data-for-her-unlock]'));
+  }
+
+  function markPaperArrive(){
+    if(reduced.matches) return;
+    if(app.classList.contains('page-enter')||app.classList.contains('page-exit')) return;
+    app.classList.add('paper-arrive');
+    clearTimeout(arriveTimer);
+    arriveTimer=setTimeout(()=>app.classList.remove('paper-arrive'),220);
+  }
+
+  function watchForHerArrive(){
+    stopForHerArrive();
+    if(reduced.matches) return;
+    arrivingForHer=true;
+    if(forHerSettled()){
+      arrivingForHer=false;
+      return;
+    }
+    const tryMark=()=>{
+      if(!arrivingForHer||route!=='for-her') return true;
+      if(!forHerSettled()) return false;
+      if(arriveObserver){
+        arriveObserver.disconnect();
+        arriveObserver=null;
+      }
+      arrivingForHer=false;
+      markPaperArrive();
+      return true;
+    };
+    if(tryMark()) return;
+    arriveObserver=new MutationObserver(tryMark);
+    arriveObserver.observe(app,{childList:true,subtree:true});
+    arriveTimer=setTimeout(()=>{
+      if(arriveObserver){
+        arriveObserver.disconnect();
+        arriveObserver=null;
+      }
+      arrivingForHer=false;
+    },4000);
+  }
+
+  function pageTransition(page,callback){
     clearTimeout(exitTimer);
     clearTimeout(enterTimer);
+    stopForHerArrive();
     if(reduced.matches){
       pending=null;
       clearPageClasses();
@@ -38,8 +97,13 @@
       if(fn) fn();
       app.classList.remove('page-exit');
       if(reduced.matches) return;
-      app.classList.add('page-enter');
-      enterTimer=setTimeout(()=>app.classList.remove('page-enter'),450);
+      // 藏品区入场由暗室光圈负责，不再叠一层翻页入场
+      if(page!=='artifacts'){
+        app.classList.add('page-enter');
+        enterTimer=setTimeout(()=>app.classList.remove('page-enter'),450);
+      }
+      // 便条若在入场过程中已换上，就不再另落一次
+      if(page==='for-her') watchForHerArrive();
     },350);
   }
 
@@ -47,6 +111,7 @@
     if(!reduced.matches) return;
     clearTimeout(exitTimer);
     clearTimeout(enterTimer);
+    stopForHerArrive();
     const fn=pending;
     pending=null;
     clearPageClasses();
@@ -58,9 +123,8 @@
   if(originalGo){
     window.go=function(page,id,record=true){
       if(route===page&&reading===id)return;
-      pageTransition(()=>{
+      pageTransition(page,()=>{
         originalGo(page,id,record);
-        // 触发新页面的动画
         triggerPageAnimations();
       });
     };
@@ -160,4 +224,5 @@
   };
 
   setupScrollReveals();
+  if(typeof route!=='undefined'&&route==='for-her') watchForHerArrive();
 })();

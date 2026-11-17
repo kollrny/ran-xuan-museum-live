@@ -404,6 +404,25 @@
     return '已合并云端愿望进度。较新的取消不会被旧记录救活，打开愿望册即可查看。';
   }
 
+  async function readPublishedContent(id) {
+    const rows = await request('/rest/v1/museum_content?id=eq.' + encodeURIComponent(id) + '&published=eq.true&select=value,revision', {}, false);
+    return rows?.[0] || null;
+  }
+
+  async function readOwnedContent(id) {
+    const rows = await request('/rest/v1/museum_content?id=eq.' + encodeURIComponent(id) + '&select=value,revision');
+    return rows?.[0] || null;
+  }
+
+  const previousAnnounce = announce;
+  announce = function () {
+    previousAnnounce();
+    window.museumCloud = window.museumCloud || {};
+    window.museumCloud.readPublishedContent = readPublishedContent;
+    window.museumCloud.readOwnedContent = readOwnedContent;
+    window.museumCloud.writeContent = writeContent;
+  };
+
   window.MuseumEditor = {
     isLoggedIn: hasEditorSession,
     sync: syncEditorFlag,
